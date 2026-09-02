@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloudflare hid my site from AI and I sell AI visibility</title>
+<meta name="description" content="I sell AI visibility to local businesses and my own site was blocking AI crawlers. I measured 293 local business websites. Most of the blocking that matters was never written down.">
+<meta name="author" content="Patrick Narcio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloudflare hid my site from AI and I sell AI visibility">
+<meta property="og:description" content="I sell AI visibility to local businesses and my own site was blocking AI crawlers. I measured 293 local business websites. Most of the blocking that matters was never written down.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --void:#08090a; --carbon:#0f1011; --graphite:#23252a;
+    --fog:#8a8f98; --mist:#d0d6e0; --paper:#ffffff;
+    --sans:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background:var(--void); color:var(--mist);
+    font-family:var(--sans); font-size:17px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  main {
+    max-width:660px; margin:0 auto;
+    padding:clamp(48px,9vw,104px) max(22px,env(safe-area-inset-left)) 110px max(22px,env(safe-area-inset-right));
+  }
+  h1 {
+    color:var(--paper); font-size:clamp(1.9rem,5vw,2.7rem); font-weight:600;
+    line-height:1.1; letter-spacing:-0.033em; margin:0 0 18px; text-wrap:balance;
+  }
+  h2 {
+    color:var(--paper); font-size:1.16rem; font-weight:600; line-height:1.3;
+    letter-spacing:-0.016em; margin:46px 0 0; text-wrap:balance;
+  }
+  h2 + p { margin-top:14px; }
+  p { margin:19px 0 0; }
+  strong { color:var(--paper); font-weight:600; }
+  code {
+    font-family:var(--mono); font-size:0.855em; color:var(--paper);
+    background:var(--carbon); border:1px solid var(--graphite);
+    border-radius:4px; padding:1px 5px;
+  }
+  pre {
+    margin:24px 0 0; background:var(--carbon); border:1px solid var(--graphite);
+    border-radius:10px; padding:16px 18px; overflow-x:auto;
+  }
+  pre code { background:none; border:0; padding:0; color:var(--mist); font-size:0.83rem; line-height:1.65; white-space:pre; }
+  .byline {
+    color:var(--fog); font-size:0.9rem; margin:0 0 40px;
+    padding-bottom:26px; border-bottom:1px solid var(--graphite);
+  }
+  footer {
+    max-width:660px; margin:0 auto; color:var(--fog); font-size:0.87rem;
+    padding:0 max(22px,env(safe-area-inset-left)) 80px;
+    border-top:1px solid var(--graphite); padding-top:26px;
+  }
+  ::selection { background:var(--paper); color:var(--void); }
+  a { color:var(--paper); }
+  :focus-visible { outline:2px solid var(--paper); outline-offset:3px; }
+</style>
+</head>
+<body>
+<main>
+    <article>
+    <h1>Cloudflare hid my site from AI and I sell AI visibility</h1>
+    <p class="byline">Patrick Narcio. <time datetime="2026-09-02">2 September 2026</time>. 293 sites measured.</p>
+    <p>I help local businesses show up when somebody asks an AI assistant for a recommendation. In August I pointed my own tooling at my own website and it came back 403. Not to browsers, only to <code>GPTBot</code>, <code>ClaudeBot</code> and <code>PerplexityBot</code>. My robots.txt also carried <code>Disallow: /</code> for eight AI crawlers and a <code>Content-Signal: ai-train=no</code>. I had written none of it.</p>
+    <p>It came from a Cloudflare setting live on my account, and my site had been unreadable to every assistant for its entire existence, along with all 36 demo pages I had been sending to prospects.</p>
+    <p>Two things below were already documented before I started, and I discovered neither of them. The split between training crawlers and search-time agents is documented by the vendors themselves. <code>GPTBot</code>, <code>ClaudeBot</code> and <code>PerplexityBot</code> collect pages in bulk to train on. <code>OAI-SearchBot</code>, <code>ChatGPT-User</code>, <code>Perplexity-User</code> and <code>Claude-SearchBot</code> fetch a page at the moment a person asks a question. Blocking the first group does not make you unrecommendable.</p>
+    <p>Large-scale measurement of AI crawler blocking also exists. &quot;Consent in Crisis: The Rapid Decline of the AI Data Commons&quot; (Data Provenance Initiative, NeurIPS 2024) audits robots.txt across the web domains behind C4, RefinedWeb and Dolma, which is far more of the web than I touched.</p>
+    <p>Neither has been applied to local business websites, which are the actual subject of &quot;will an assistant recommend me&quot;. So that is what I measured, and the useful result was not the one I went looking for.</p>
+    <h2>Why my first scan said zero</h2>
+    <p>I scanned 29 local business websites, found nothing blocking, wrote the idea off and moved on. Weeks later I found the bug that produced that zero: my robots.txt parser could not see <code>User-agent: *</code>, so any site whose file said</p>
+    <pre><code>User-agent: *
+Disallow: /</code></pre>
+    <p>came back as open, and that is the single most common way a site blocks everything. Then a second bug. The scanner read robots.txt and status codes only, so it could not see a <code>noindex</code> tag, and since WordPress 5.3 the &quot;Discourage search engines&quot; setting stopped writing <code>Disallow: /</code> and started emitting noindex instead. A robots.txt-only scanner is blind to every WordPress site that ticked that box.</p>
+    <p>Then the worse problem: I had never saved the list of 29 hosts. No CSV, no text file. That scan can never be re-run or checked by anyone, including me, and I cannot correct a number I cannot check, so I retired it. I re-ran the fixed scanner against 310 local business sites whose host list I wrote to disk before running anything, and 293 answered.</p>
+    <h2>What the 293 sites showed</h2>
+    <p>Fifteen refuse an AI crawler in robots.txt, and six of those serve the same file, byte for byte, across six different dental practices:</p>
+    <pre><code>User-agent: Googlebot
+User-agent: bingbot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Perplexity-User
+User-agent: Claude-SearchBot
+Disallow: /~*
+
+User-agent: *
+Disallow: /</code></pre>
+    <p>Every search-time agent is allowed. The training crawlers are not named, so they fall through to the blanket disallow. Somebody stayed out of the training sets while staying readable when a customer asks, and <strong>fourteen of the fifteen robots.txt blockers draw exactly that line.</strong> Fifteen out of 293 is 5.1%. Reported as one number, &quot;5% of sites block AI&quot; describes almost nothing that costs a business a customer, which is why I stopped treating a robots.txt count as the finding.</p>
+    <p>The finding was somewhere else. Separately from robots.txt, twenty sites refused an AI crawler while serving browsers, Googlebot, an unknown agent and curl normally. Eighteen of those refusals held when I re-tested one request at a time, three seconds apart.</p>
+    <p>Eleven refuse with a 403. The other seven return a 429 that never lets up, a rate-limit code used as a door. I count those separately because they are weaker evidence and my first pass discarded 429s on principle, but these seven held on every re-test while a browser got 200 from the same address moments later.</p>
+    <p><strong>Twelve of the eighteen have no robots.txt rule about AI at all.</strong> On the stricter bar, counting only the 403s, it is five of eleven. Either way, most of the sites doing the blocking never wrote it down, and that gap is the whole thing.</p>
+    <p>The two groups also split cleanly. Every site that wrote an AI rule returns a plain 403. Every one of the seven persistent 429s has no rule at all. Deliberate refusal announces itself and answers 403; the silent kind shows up as a rate limit.</p>
+    <p>When a business means to opt out it says so in the file, the way those six dental practices did. These twelve say nothing anywhere, and something at the edge still turns crawlers away. They span six different setups. I re-read their Server headers on 1 September 2026: four sit behind Cloudflare, three on nginx, two on LiteSpeed, one Apache, one a CDN calling itself only <code>hcdn</code>, and one that sends no Server header at all. Three of the nginx sites identify as WP Engine, which is the nearest thing to a single culprit and is still only a quarter of them, so no one vendor&#x27;s default explains this. What explains it is bot-protection products treating AI crawlers as something to stop, on sites whose owners have never opened the setting.</p>
+    <p>Stated policy and actual behaviour are different measurements, and only one of them is easy to collect. Every robots.txt survey I have read measures the easy one.</p>
+    <h2>What I ruled out, including my own mistakes</h2>
+    <p>A flaky 429 is not a policy. My first pass found 42 apparent blocks, which felt too high, so I re-tested each with one request three seconds apart and no concurrency. Four were 429-only and moved between runs, three stopped refusing altogether, and since the original scan made eight requests per host across ten workers, a share of those rate limits was me. The seven 429s I do count held every single time.</p>
+    <p>I also had to rule out the possibility that these CDNs refuse anything unfamiliar, because a CDN that allowlists known-good bots looks identical to a deliberate AI policy. My scanner defined an unknown-agent control and never used it, so the comparison its own docstring promised had never run. I ran it, probing every blocker with an unremarkable unknown agent and with curl, and not one refused them. The refusals are agent-specific.</p>
+    <p>The last mistake was mine and it was in the product. The plugin I ship labelled <code>GPTBot</code> as &quot;ChatGPT&quot;. So a business that deliberately opted out of training got told &quot;ChatGPT: blocked&quot;.</p>
+    <p>That reads as &quot;you are invisible&quot;, when the truth is closer to &quot;you chose not to be training data and you are still perfectly recommendable.&quot; I have shipped a fix. The point stands: I missed the distinction in a tool whose whole job is not missing it.</p>
+    <h2>Method, and how to check your own site</h2>
+    <p>The 310 hosts came from OpenStreetMap across Fairfax, Loudoun and Arlington in Virginia, covering seven trades (dentists, hairdressers, car repair, veterinary, HVAC, plumbers and roofers) plus two petrol stations that came in on the car repair query and that I left in instead of quietly dropping.</p>
+    <p>Each site was fetched using each crawler&#x27;s real user agent string, not a shortened token, because firewall rules match the whole string, and the controls were an ordinary browser, Googlebot, an unknown agent and curl. robots.txt was read from the domain root and parsed with group precedence, so a <code>*</code> rule applies only when no group names the crawler, and an <code>Allow</code> cancelling a <code>Disallow</code> is respected. The host list was written to disk before anything ran, a rule that exists because of the 29 I lost.</p>
+    <p>To check your own site, fetch your front page as an AI crawler and see what comes back:</p>
+    <pre><code>curl -s -o /dev/null -w &quot;%{http_code}\n&quot; -A \
+  &quot;Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.1; +https://openai.com/gptbot&quot; \
+  https://yoursite.com/</code></pre>
+    <p>A <code>200</code> means you are readable. A <code>403</code> or <code>429</code> means something is turning them away, and if your robots.txt does not mention AI crawlers, you did not ask for it.</p>
+    <p>Then read the file itself. If the only names in your disallow are <code>GPTBot</code>, <code>ClaudeBot</code> and <code>PerplexityBot</code>, you have opted out of training and assistants can still read you when someone asks, which may be exactly what you wanted. If <code>OAI-SearchBot</code> or <code>ChatGPT-User</code> are in there, that is the one worth a second look.</p>
+    </article>
+</main>
+<footer>
+  <p>I measure whether AI assistants recommend local businesses, and fix the sites so they do.</p>
+</footer>
+</body>
+</html>

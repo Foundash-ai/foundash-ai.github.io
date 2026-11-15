@@ -29,7 +29,8 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
 <style>
 [data-only],[data-form-wrap],[data-keep]{display:contents}
 [data-thanks][hidden],[data-form-wrap][hidden]{display:none}
-@media (max-width:760px){[data-only=wide]{display:none}header nav{display:none!important}}
+@media (max-width:760px){[data-only=wide]{display:none}header nav{display:none!important}header a[href="#start"]{margin-left:auto}}
+@media (max-width:430px){h1 br{display:none}}
 @media (min-width:761px){[data-only=narrow]{display:none}}
 .h0:hover{color:#f7f8f8 !important}
 .h1:hover{color:#f7f8f8 !important}
@@ -79,7 +80,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
       <div style="min-height:78svh;padding-top:clamp(120px,18vh,180px);display:flex;flex-direction:column;gap:28px">
         <div data-hero="0.3" style="font-family:'Berkeley Mono',ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a8f98">For local businesses · Re-checked after every change</div>
         <h1 style="margin:0;font-weight:510;font-size:clamp(40px,6.2vw,72px);line-height:1;letter-spacing:-0.022em;text-wrap:balance">
-          <span data-hero="0.4" style="display:block">Someone asked AI<br>for a <span data-type="plumber.|roofer.">plumber.</span><span data-caret="" style="display:inline-block;width:3px;height:0.78em;background:#e9b638;margin-left:4px;vertical-align:-0.04em"></span></span>
+          <span data-hero="0.4" style="display:block">Someone asked AI <br>for a <span data-type="plumber.|roofer.">plumber.</span><span data-caret="" style="display:inline-block;width:3px;height:0.78em;background:#e9b638;margin-left:4px;vertical-align:-0.04em"></span></span>
           <span data-hero="0.5" style="display:block;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:1.1em;letter-spacing:-0.012em;color:#e9b638;padding-top:4px">Did it say your name?</span>
         </h1>
         <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px 48px">
@@ -318,7 +319,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
       <div style="width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:flex;justify-content:space-between;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a8f98">
         <span>How it works</span><span data-walk-count="">01 / 04</span>
       </div>
-      <div style="flex:1;min-height:0;display:grid;overflow:hidden">
+      <div style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);overflow:hidden">
 
       <div data-band="0" style="grid-area:1 / 1;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
         <div style="display:flex;flex-direction:column;gap:18px">
@@ -396,7 +397,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
         <div style="width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px)">
           <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">Word of mouth worked fine.<br><span style="font-family:'EB Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:1.08em;color:#fbfaf7;opacity:var(--awk,0)">Until the mouth was a chatbot.</span></h2>
         </div>
-        <div style="flex:1;min-height:0;display:grid;margin-top:clamp(20px,5vh,48px)">
+        <div style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);margin-top:clamp(20px,5vh,48px)">
           <div style="grid-area:1 / 1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:clamp(20px,5vh,48px);opacity:var(--stream,1)">
             <div style="width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:flex;flex-direction:column;gap:18px;opacity:var(--awk,0)">
             <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px">

@@ -1,215 +1,949 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cloudflare hid my site from AI and I sell AI visibility</title>
-<meta name="description" content="I sell AI visibility to local businesses and my own site was blocking AI crawlers. I measured 293 local business websites. Most of the blocking that matters was never written down.">
-<meta name="author" content="Patrick Narcio">
+<title>Foundash: how often AI recommends you</title>
+<meta name="description" content="Foundash measures how often ChatGPT, Gemini, Perplexity and Google's AI recommend your business. Then we fix your website and check again.">
 <link rel="canonical" href="https://foundash-ai.github.io/">
+<meta property="og:type" content="website">
 <meta property="og:url" content="https://foundash-ai.github.io/">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Cloudflare hid my site from AI and I sell AI visibility">
-<meta property="og:description" content="I sell AI visibility to local businesses and my own site was blocking AI crawlers. I measured 293 local business websites. Most of the blocking that matters was never written down.">
+<meta property="og:title" content="Foundash: how often AI recommends you">
+<meta property="og:description" content="We measure how often AI names your business when customers ask. Then we fix your website and check again.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#08090a">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Foundash","url":"https://foundash-ai.github.io/","logo":"https://foundash-ai.github.io/logo-white.png","description":"Foundash measures how often AI assistants recommend a business, then fixes its website and measures again."}</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&amp;family=EB+Garamond:ital,wght@1,400;1,500&amp;display=swap" rel="stylesheet">
 <style>
-  :root {
-    color-scheme: dark;
-    --void:#08090a; --carbon:#0f1011; --graphite:#23252a;
-    --fog:#8a8f98; --mist:#d0d6e0; --paper:#ffffff;
-    --sans:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin:0; background:var(--void); color:var(--mist);
-    font-family:var(--sans); font-size:17px; line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-  }
-  main {
-    max-width:660px; margin:0 auto;
-    padding:clamp(48px,9vw,104px) max(22px,env(safe-area-inset-left)) 110px max(22px,env(safe-area-inset-right));
-  }
-  h1 {
-    color:var(--paper); font-size:clamp(1.9rem,5vw,2.7rem); font-weight:600;
-    line-height:1.1; letter-spacing:-0.033em; margin:0 0 18px; text-wrap:balance;
-  }
-  h2 {
-    color:var(--paper); font-size:1.16rem; font-weight:600; line-height:1.3;
-    letter-spacing:-0.016em; margin:46px 0 0; text-wrap:balance;
-  }
-  h2 + p { margin-top:14px; }
-  p { margin:19px 0 0; }
-  strong { color:var(--paper); font-weight:600; }
-  code {
-    font-family:var(--mono); font-size:0.855em; color:var(--paper);
-    background:var(--carbon); border:1px solid var(--graphite);
-    border-radius:4px; padding:1px 5px;
-  }
-  pre {
-    margin:24px 0 0; background:var(--carbon); border:1px solid var(--graphite);
-    border-radius:10px; padding:16px 18px; overflow-x:auto;
-  }
-  pre code { background:none; border:0; padding:0; color:var(--mist); font-size:0.83rem; line-height:1.65; white-space:pre; }
-  .byline {
-    color:var(--fog); font-size:0.9rem; margin:0 0 40px;
-    padding-bottom:26px; border-bottom:1px solid var(--graphite);
-  }
-  footer {
-    max-width:660px; margin:0 auto; color:var(--fog); font-size:0.87rem;
-    padding:0 max(22px,env(safe-area-inset-left)) 80px;
-    border-top:1px solid var(--graphite); padding-top:26px;
-  }
-  ::selection { background:var(--paper); color:var(--void); }
-  a { color:var(--paper); }
-  :focus-visible { outline:2px solid var(--paper); outline-offset:3px; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:#08090a}
+body{margin:0;background:#08090a;color:#f7f8f8;font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.6;letter-spacing:-0.011em;-webkit-font-smoothing:antialiased}
+a{color:#e9e9e6;text-decoration:none}
+a:hover{color:#f7f8f8}
+::selection{background:rgba(233,182,56,.36)}
+input::placeholder{color:#8a8f98}
+input:focus{outline:none;border-color:rgba(233,182,56,.7)}
 </style>
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@graph": [
-  {
-   "@type": "Organization",
-   "@id": "https://foundash-ai.github.io/#org",
-   "name": "Foundash",
-   "url": "https://foundash-ai.github.io/",
-   "description": "Measures whether AI assistants recommend a local business, and fixes the site so they do.",
-   "founder": {
-    "@id": "https://foundash-ai.github.io/#patrick"
-   },
-   "areaServed": "Northern Virginia, United States",
-   "sameAs": [
-    "https://wordpress.org/plugins/foundash-ai-access-check/",
-    "https://github.com/Foundash-ai"
-   ]
-  },
-  {
-   "@type": "Person",
-   "@id": "https://foundash-ai.github.io/#patrick",
-   "name": "Patrick Narcio",
-   "url": "https://foundash-ai.github.io/",
-   "jobTitle": "Founder",
-   "worksFor": {
-    "@id": "https://foundash-ai.github.io/#org"
-   }
-  },
-  {
-   "@type": "SoftwareApplication",
-   "@id": "https://wordpress.org/plugins/foundash-ai-access-check/#app",
-   "name": "Foundash AI Access Check",
-   "applicationCategory": "BusinessApplication",
-   "operatingSystem": "WordPress",
-   "url": "https://wordpress.org/plugins/foundash-ai-access-check/",
-   "author": {
-    "@id": "https://foundash-ai.github.io/#patrick"
-   },
-   "publisher": {
-    "@id": "https://foundash-ai.github.io/#org"
-   },
-   "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-   }
-  },
-  {
-   "@type": "Article",
-   "@id": "https://foundash-ai.github.io/#article",
-   "headline": "Cloudflare hid my site from AI and I sell AI visibility",
-   "url": "https://foundash-ai.github.io/",
-   "datePublished": "2026-09-02",
-   "dateModified": "2026-09-03",
-   "author": {
-    "@id": "https://foundash-ai.github.io/#patrick"
-   },
-   "publisher": {
-    "@id": "https://foundash-ai.github.io/#org"
-   },
-   "about": [
-    {
-     "@type": "Thing",
-     "name": "AI crawler blocking"
-    },
-    {
-     "@type": "Thing",
-     "name": "Local business websites"
-    },
-    {
-     "@type": "Thing",
-     "name": "robots.txt"
-    }
-   ],
-   "mentions": [
-    {
-     "@id": "https://wordpress.org/plugins/foundash-ai-access-check/#app"
-    }
-   ],
-   "isBasedOn": "Measurement of 293 local business websites in Northern Virginia, August 2026"
-  }
- ]
-}
-</script>
+<style>
+[data-only],[data-form-wrap],[data-keep]{display:contents}
+[data-thanks][hidden],[data-form-wrap][hidden]{display:none}
+@media (max-width:760px){[data-only=wide]{display:none}header nav{display:none!important}}
+@media (min-width:761px){[data-only=narrow]{display:none}}
+.h0:hover{color:#f7f8f8 !important}
+.h1:hover{color:#f7f8f8 !important}
+.h2:hover{color:#f7f8f8 !important}
+.h3:hover{color:#f7f8f8 !important}
+.h4:hover{filter:brightness(1.08) !important;color:#08090a !important}
+.h5:hover{filter:brightness(1.06) !important;color:#08090a !important}
+.h6:hover{color:#f7f8f8 !important}
+.h7:hover{filter:brightness(1.06) !important}
+.h8:hover{color:#f7f8f8 !important}
+.h9:hover{color:#f7f8f8 !important}
+.h10:hover{color:#f7f8f8 !important}
+.h11:hover{color:#f7f8f8 !important}
+.h12:hover{color:#f7f8f8 !important}</style>
 </head>
 <body>
-<main>
-    <article>
-    <h1>Cloudflare hid my site from AI and I sell AI visibility</h1>
-    <p class="byline">Patrick Narcio. <time datetime="2026-09-02">2 September 2026</time>. 293 sites measured.</p>
-    <p>I help local businesses show up when somebody asks an AI assistant for a recommendation. In August I pointed my own tooling at my own website and it came back 403. Not to browsers, only to <code>GPTBot</code>, <code>ClaudeBot</code> and <code>PerplexityBot</code>. My robots.txt also carried <code>Disallow: /</code> for eight AI crawlers and a <code>Content-Signal: ai-train=no</code>. I had written none of it.</p>
-    <p>It came from a Cloudflare setting live on my account, and my site had been unreadable to every assistant for its entire existence, along with all 36 demo pages I had been sending to prospects.</p>
-    <p>Two things below were already documented before I started, and I discovered neither of them. The split between training crawlers and search-time agents is documented by the vendors themselves. <code>GPTBot</code>, <code>ClaudeBot</code> and <code>PerplexityBot</code> collect pages in bulk to train on. <code>OAI-SearchBot</code>, <code>ChatGPT-User</code>, <code>Perplexity-User</code> and <code>Claude-SearchBot</code> fetch a page at the moment a person asks a question. Blocking the first group does not make you unrecommendable.</p>
-    <p>Large-scale measurement of AI crawler blocking also exists. &quot;Consent in Crisis: The Rapid Decline of the AI Data Commons&quot; (Data Provenance Initiative, NeurIPS 2024) audits robots.txt across the web domains behind C4, RefinedWeb and Dolma, which is far more of the web than I touched.</p>
-    <p>Neither has been applied to local business websites, which are the actual subject of &quot;will an assistant recommend me&quot;. So that is what I measured, and the useful result was not the one I went looking for.</p>
-    <h2>Why my first scan said zero</h2>
-    <p>I scanned 29 local business websites, found nothing blocking, wrote the idea off and moved on. Weeks later I found the bug that produced that zero: my robots.txt parser could not see <code>User-agent: *</code>, so any site whose file said</p>
-    <pre><code>User-agent: *
-Disallow: /</code></pre>
-    <p>came back as open, and that is the single most common way a site blocks everything. Then a second bug. The scanner read robots.txt and status codes only, so it could not see a <code>noindex</code> tag, and since WordPress 5.3 the &quot;Discourage search engines&quot; setting stopped writing <code>Disallow: /</code> and started emitting noindex instead. A robots.txt-only scanner is blind to every WordPress site that ticked that box.</p>
-    <p>Then the worse problem: I had never saved the list of 29 hosts. No CSV, no text file. That scan can never be re-run or checked by anyone, including me, and I cannot correct a number I cannot check, so I retired it. I re-ran the fixed scanner against 310 local business sites whose host list I wrote to disk before running anything, and 293 answered.</p>
-    <h2>What the 293 sites showed</h2>
-    <p>Fifteen refuse an AI crawler in robots.txt, and six of those serve the same file, byte for byte, across six different dental practices:</p>
-    <pre><code>User-agent: Googlebot
-User-agent: bingbot
-User-agent: OAI-SearchBot
-User-agent: ChatGPT-User
-User-agent: Perplexity-User
-User-agent: Claude-SearchBot
-Disallow: /~*
+<div id="top" style="position:relative;background:#08090a;color:#f7f8f8;overflow-x:clip;font-family:'Inter',system-ui,sans-serif">
 
-User-agent: *
-Disallow: /</code></pre>
-    <p>Every search-time agent is allowed. The training crawlers are not named, so they fall through to the blanket disallow. Somebody stayed out of the training sets while staying readable when a customer asks, and <strong>fourteen of the fifteen robots.txt blockers draw exactly that line.</strong> Fifteen out of 293 is 5.1%. Reported as one number, &quot;5% of sites block AI&quot; describes almost nothing that costs a business a customer, which is why I stopped treating a robots.txt count as the finding.</p>
-    <p>The finding was somewhere else. Separately from robots.txt, twenty sites refused an AI crawler while serving browsers, Googlebot, an unknown agent and curl normally. Eighteen of those refusals held when I re-tested one request at a time, three seconds apart.</p>
-    <p>Eleven refuse with a 403. The other seven return a 429 that never lets up, a rate-limit code used as a door. I count those separately because they are weaker evidence and my first pass discarded 429s on principle, but these seven held on every re-test while a browser got 200 from the same address moments later.</p>
-    <p><strong>Twelve of the eighteen have no robots.txt rule about AI at all.</strong> On the stricter bar, counting only the 403s, it is five of eleven. Either way, most of the sites doing the blocking never wrote it down, and that gap is the whole thing.</p>
-    <p>The two groups also split cleanly. Every site that wrote an AI rule returns a plain 403. Every one of the seven persistent 429s has no rule at all. Deliberate refusal announces itself and answers 403; the silent kind shows up as a rate limit.</p>
-    <p>When a business means to opt out it says so in the file, the way those six dental practices did. These twelve say nothing anywhere, and something at the edge still turns crawlers away. They span six different setups. I re-read their Server headers on 1 September 2026: four sit behind Cloudflare, three on nginx, two on LiteSpeed, one Apache, one a CDN calling itself only <code>hcdn</code>, and one that sends no Server header at all. Three of the nginx sites identify as WP Engine, which is the nearest thing to a single culprit and is still only a quarter of them, so no one vendor&#x27;s default explains this. What explains it is bot-protection products treating AI crawlers as something to stop, on sites whose owners have never opened the setting.</p>
-    <p>Stated policy and actual behaviour are different measurements, and only one of them is easy to collect. Every robots.txt survey I have read measures the easy one.</p>
-    <h2>What I ruled out, including my own mistakes</h2>
-    <p>A flaky 429 is not a policy. My first pass found 42 apparent blocks, which felt too high, so I re-tested each with one request three seconds apart and no concurrency. Four were 429-only and moved between runs, three stopped refusing altogether, and since the original scan made eight requests per host across ten workers, a share of those rate limits was me. The seven 429s I do count held every single time.</p>
-    <p>I also had to rule out the possibility that these CDNs refuse anything unfamiliar, because a CDN that allowlists known-good bots looks identical to a deliberate AI policy. My scanner defined an unknown-agent control and never used it, so the comparison its own docstring promised had never run. I ran it, probing every blocker with an unremarkable unknown agent and with curl, and not one refused them. The refusals are agent-specific.</p>
-    <p>The last mistake was mine and it was in the product. The plugin I ship labelled <code>GPTBot</code> as &quot;ChatGPT&quot;. So a business that deliberately opted out of training got told &quot;ChatGPT: blocked&quot;.</p>
-    <p>That reads as &quot;you are invisible&quot;, when the truth is closer to &quot;you chose not to be training data and you are still perfectly recommendable.&quot; I have shipped a fix. The point stands: I missed the distinction in a tool whose whole job is not missing it.</p>
-    <h2>Method, and how to check your own site</h2>
-    <p>The 310 hosts came from OpenStreetMap across Fairfax, Loudoun and Arlington in Virginia, covering seven trades (dentists, hairdressers, car repair, veterinary, HVAC, plumbers and roofers) plus two petrol stations that came in on the car repair query and that I left in instead of quietly dropping.</p>
-    <p>Each site was fetched using each crawler&#x27;s real user agent string, not a shortened token, because firewall rules match the whole string, and the controls were an ordinary browser, Googlebot, an unknown agent and curl. robots.txt was read from the domain root and parsed with group precedence, so a <code>*</code> rule applies only when no group names the crawler, and an <code>Allow</code> cancelling a <code>Disallow</code> is respected. The host list was written to disk before anything ran, a rule that exists because of the 29 I lost.</p>
-    <p>To check your own site, fetch your front page as an AI crawler and see what comes back:</p>
-    <pre><code>curl -s -o /dev/null -w &quot;%{http_code}\n&quot; -A \
-  &quot;Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.1; +https://openai.com/gptbot&quot; \
-  https://yoursite.com/</code></pre>
-    <p>A <code>200</code> means you are readable. A <code>403</code> or <code>429</code> means something is turning them away, and if your robots.txt does not mention AI crawlers, you did not ask for it.</p>
-    <p>Then read the file itself. If the only names in your disallow are <code>GPTBot</code>, <code>ClaudeBot</code> and <code>PerplexityBot</code>, you have opted out of training and assistants can still read you when someone asks, which may be exactly what you wanted. If <code>OAI-SearchBot</code> or <code>ChatGPT-User</code> are in there, that is the one worth a second look.</p>
-    </article>
-</main>
-<footer>
-  <p>I measure whether AI assistants recommend local businesses, and fix the sites so they do.
-  If your own site came back 403, or you want yours checked, email
-  <a href="mailto:patricksmediastudio@gmail.com">patricksmediastudio@gmail.com</a>
-  and I will look at it before replying.</p>
-</footer>
+  <header data-header="" style="position:fixed;top:0;left:0;right:0;z-index:50;height:72px;border-bottom:1px solid transparent;transition:background .16s cubic-bezier(.25,.46,.45,.94),border-color .16s cubic-bezier(.25,.46,.45,.94)">
+    <div style="max-width:1200px;height:100%;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:flex;align-items:center;gap:28px">
+      <a href="#top" style="display:flex;align-items:center;gap:10px;color:#f7f8f8;font-weight:590;font-size:16px;letter-spacing:-0.012em;flex:none">
+        <span role="img" aria-label="foundash" style="display:block;width:118px;height:30px;overflow:hidden">
+          <img src="logo-white.png" alt="" style="display:block;width:130px;height:auto;margin:-14px 0 0 -6px">
+        </span>
+      </a>
+      <nav style="flex:1;min-width:0;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0 28px;height:22px;overflow:hidden;font-size:14px;line-height:22px">
+        <a href="#how" style="color:#8a8f98" data-h class="h0">How it works</a>
+        <a href="#report" style="color:#8a8f98" data-h class="h1">The report</a>
+        <a href="#fix" style="color:#8a8f98" data-h class="h2">The fix</a>
+        <a href="#promise" style="color:#8a8f98" data-h class="h3">Our promise</a>
+      </nav>
+      <a href="#start" style="flex:none;height:32px;padding:0 14px;border-radius:999px;background:#e6e6e6;color:#08090a;font-size:13px;font-weight:510;display:flex;align-items:center;transition:filter .16s cubic-bezier(.25,.46,.45,.94)" data-h class="h4">Get your number</a>
+    </div>
+  </header>
+
+  <section data-hero-section="" data-ripple-host="" data-screen-label="01 Hero" style="position:relative;overflow:clip;background:#08090a;padding-bottom:clamp(64px,8vw,120px)">
+    <div style="position:absolute;left:0;right:0;top:0;height:max(100svh,720px);background:#0e1626 url('art/hero-night.jpg') center 38% / cover no-repeat">
+      <div style="position:absolute;inset:0;background:linear-gradient(100deg,rgba(8,9,10,.55) 0%,rgba(8,9,10,.25) 38%,rgba(8,9,10,0) 60%)"></div>
+      <div style="position:absolute;left:0;right:0;top:66%;bottom:0">
+        <canvas data-ripple="" style="display:block;width:100%;height:100%"></canvas>
+      </div>
+      <div data-motes="22" style="position:absolute;left:0;right:0;top:50%;height:30%;pointer-events:none"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:28%;background:linear-gradient(180deg,rgba(8,9,10,0),#08090a);pointer-events:none"></div>
+    </div>
+
+    <div style="position:relative;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px)">
+      <div style="min-height:78svh;padding-top:clamp(120px,18vh,180px);display:flex;flex-direction:column;gap:28px">
+        <div data-hero="0.3" style="font-family:'Berkeley Mono',ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a8f98">For local businesses · Re-checked after every change</div>
+        <h1 style="margin:0;font-weight:510;font-size:clamp(40px,6.2vw,72px);line-height:1;letter-spacing:-0.022em;text-wrap:balance">
+          <span data-hero="0.4" style="display:block">Someone asked AI<br>for a <span data-type="plumber.|roofer.">plumber.</span><span data-caret="" style="display:inline-block;width:3px;height:0.78em;background:#e9b638;margin-left:4px;vertical-align:-0.04em"></span></span>
+          <span data-hero="0.5" style="display:block;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:1.1em;letter-spacing:-0.012em;color:#e9b638;padding-top:4px">Did it say your name?</span>
+        </h1>
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px 48px">
+          <p data-hero="0.6" style="margin:0;font-size:17px;line-height:1.55;color:#8a8f98;max-width:40ch;text-wrap:pretty">Foundash counts how often AI recommends your business, then fixes your website and checks again.</p>
+          <div data-hero="0.7" style="display:flex;align-items:center;gap:20px">
+            <a href="#start" style="position:relative;overflow:hidden;height:44px;padding:0 20px;border-radius:999px;background:#f7f8f8;color:#08090a;font-size:14px;font-weight:510;display:flex;align-items:center;transition:filter .16s cubic-bezier(.25,.46,.45,.94)" data-h class="h5">
+              <span data-sweep="2400" style="position:absolute;top:-30%;bottom:-30%;left:0;width:42%;background:linear-gradient(90deg,transparent,rgba(233,182,56,.6),transparent);transform:translateX(-140%) skewX(-18deg);pointer-events:none"></span>
+              <span style="position:relative">Get your number</span>
+            </a>
+            <a href="#how" style="font-size:14px;color:#d0d6e0" data-h class="h6">How it works →</a>
+          </div>
+        </div>
+      </div>
+
+      <div data-hero-frame="" style="position:relative">
+        <div data-shine-frame="hero" style="position:relative;border-radius:16px;padding:8px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(233,182,56,.07));border:1px solid #ffffff14">
+          <div style="position:absolute;inset:-1px;border-radius:16px;border:1px solid rgba(233,182,56,.9);pointer-events:none;mask-image:radial-gradient(240px 170px at var(--mx,20%) 0%,#000,transparent 70%);-webkit-mask-image:radial-gradient(240px 170px at var(--mx,20%) 0%,#000,transparent 70%)"></div>
+          <div style="position:relative;border-radius:12px;overflow:hidden;background:#0b0c0d;border:1px solid #ffffff0d">
+            <div style="position:absolute;width:800px;height:800px;left:-200px;top:-200px;background:radial-gradient(circle,rgba(255,255,255,.04),transparent 60%);pointer-events:none"></div>
+            <div data-only="wide">
+            <div style="position:relative;display:grid;grid-template-columns:208px minmax(0,1fr) 300px;min-width:1040px;height:540px;font-size:13px;line-height:1.4;letter-spacing:-0.01em">
+
+              <div style="background:#0f1011;border-right:1px solid #ffffff0d;padding:12px 10px;display:flex;flex-direction:column;gap:2px;color:#8a8f98">
+                <div style="display:flex;align-items:center;gap:8px;padding:6px 8px 14px">
+                  <span style="position:relative;display:inline-block;width:14px;height:14px;flex:none">
+                    <span style="position:absolute;inset:2px;background:#e9b638"></span>
+                    <span style="position:absolute;inset:2px;background:#e9b638;transform:rotate(45deg)"></span>
+                  </span>
+                  <span style="font-weight:510;color:#f7f8f8">Hollis Heating &amp; Air</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px;border-radius:6px;background:#ffffff0d;color:#f7f8f8"><span>Standings</span></div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px"><span>Answers</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">40</span></div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px"><span>Fixes</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">6</span></div>
+                <div style="display:flex;justify-content:space-between;padding:6px 8px"><span>Reports</span></div>
+                <div style="padding:18px 8px 6px;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#62666d">Towns</div>
+                <div style="padding:6px 8px">Columbus</div>
+                <div style="padding:6px 8px">Dublin</div>
+                <div style="padding:6px 8px">Westerville</div>
+                <div style="margin-top:auto;padding:8px;font-size:12px;color:#62666d">Next check · Oct 26</div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;min-width:0">
+                <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #ffffff0d;color:#8a8f98">
+                  <div style="display:flex;gap:8px;align-items:center"><span style="color:#f7f8f8">Standings</span><span>›</span><span>AC repair</span><span>›</span><span>Columbus, OH</span></div>
+                  <span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;padding:2px 8px;border:1px solid #ffffff14;border-radius:999px">Check 6</span>
+                </div>
+                <div style="padding:26px 24px 0;display:flex;align-items:flex-end;gap:28px">
+                  <div>
+                    <div style="color:#8a8f98">How often AI recommends you</div>
+                    <div style="font-size:76px;font-weight:510;letter-spacing:-0.035em;line-height:1;color:#f7f8f8;font-variant-numeric:tabular-nums;margin-top:8px">25%</div>
+                  </div>
+                  <div style="padding-bottom:10px;display:flex;flex-direction:column;gap:4px">
+                    <span style="color:#68cc58">+5 since last check</span>
+                    <span style="color:#62666d">Kestrel Heating is at 75%</span>
+                  </div>
+                </div>
+                <div style="padding:22px 24px;display:flex;flex-direction:column">
+                  <div style="display:grid;grid-template-columns:32px minmax(0,1fr) 200px 48px;gap:14px;padding:0 10px 8px;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#62666d;border-bottom:1px solid #ffffff0d">
+                    <span>#</span><span>Business</span><span>Named in answers</span><span style="text-align:right">%</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:32px minmax(0,1fr) 200px 48px;gap:14px;align-items:center;height:40px;padding:0 10px;border-bottom:1px solid #ffffff0d;color:#d0d6e0">
+                    <span style="color:#62666d;font-variant-numeric:tabular-nums">1</span><span>Kestrel Heating &amp; Cooling</span>
+                    <span style="height:4px;border-radius:2px;background:#232326"><span style="display:block;height:4px;border-radius:2px;width:75%;background:#8a8f98"></span></span>
+                    <span style="text-align:right;font-variant-numeric:tabular-nums">75%</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:32px minmax(0,1fr) 200px 48px;gap:14px;align-items:center;height:40px;padding:0 10px;border-bottom:1px solid #ffffff0d;color:#d0d6e0">
+                    <span style="color:#62666d;font-variant-numeric:tabular-nums">2</span><span>Larkspur Climate Co.</span>
+                    <span style="height:4px;border-radius:2px;background:#232326"><span style="display:block;height:4px;border-radius:2px;width:60%;background:#8a8f98"></span></span>
+                    <span style="text-align:right;font-variant-numeric:tabular-nums">60%</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:32px minmax(0,1fr) 200px 48px;gap:14px;align-items:center;height:40px;padding:0 10px;border-bottom:1px solid #ffffff0d;color:#d0d6e0">
+                    <span style="color:#62666d;font-variant-numeric:tabular-nums">3</span><span>Northgate Furnace</span>
+                    <span style="height:4px;border-radius:2px;background:#232326"><span style="display:block;height:4px;border-radius:2px;width:45%;background:#8a8f98"></span></span>
+                    <span style="text-align:right;font-variant-numeric:tabular-nums">45%</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:32px minmax(0,1fr) 200px 48px;gap:14px;align-items:center;height:40px;padding:0 10px;margin:2px 0;border:1px solid rgba(233,182,56,.45);border-radius:6px;background:rgba(233,182,56,.06);color:#f7f8f8">
+                    <span style="color:#e9b638;font-variant-numeric:tabular-nums">4</span><span style="font-weight:510">Hollis Heating &amp; Air <span style="color:#8a8f98;font-weight:400">· you</span></span>
+                    <span style="height:4px;border-radius:2px;background:#232326"><span style="display:block;height:4px;border-radius:2px;width:25%;background:#e9b638;box-shadow:0 0 10px rgba(233,182,56,.6)"></span></span>
+                    <span style="text-align:right;font-variant-numeric:tabular-nums;color:#e9b638">25%</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:32px minmax(0,1fr) 200px 48px;gap:14px;align-items:center;height:40px;padding:0 10px;color:#d0d6e0">
+                    <span style="color:#62666d;font-variant-numeric:tabular-nums">5</span><span>Alder Mechanical</span>
+                    <span style="height:4px;border-radius:2px;background:#232326"><span style="display:block;height:4px;border-radius:2px;width:10%;background:#8a8f98"></span></span>
+                    <span style="text-align:right;font-variant-numeric:tabular-nums">10%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background:#0f1011;border-left:1px solid #ffffff0d;display:flex;flex-direction:column;min-width:0">
+                <div style="height:44px;flex:none;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid #ffffff0d">
+                  <div data-dots="" style="display:grid;grid-template-columns:repeat(5,3px);grid-auto-rows:3px;gap:2px"></div>
+                  <span style="color:#f7f8f8;font-weight:510">Asking now</span>
+                </div>
+                <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
+                  <div style="padding:12px;border:1px solid #ffffff0d;border-radius:8px;background:#141516;display:flex;flex-direction:column;gap:8px">
+                    <div style="color:#d0d6e0">"best AC repair near me"</div>
+                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#62666d"><span>ChatGPT</span><span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#eb5757"></span>Named 3 others</span></div>
+                  </div>
+                  <div style="padding:12px;border:1px solid #ffffff0d;border-radius:8px;background:#141516;display:flex;flex-direction:column;gap:8px">
+                    <div style="color:#d0d6e0">"furnace repair Columbus"</div>
+                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#62666d"><span>Gemini</span><span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#27a644"></span>Named you first</span></div>
+                  </div>
+                  <div style="padding:12px;border:1px solid #ffffff14;border-radius:8px;background:#191a1b;display:flex;flex-direction:column;gap:8px">
+                    <div style="color:#d0d6e0">"AC not cooling, who do I call"</div>
+                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#62666d"><span>Perplexity</span><span data-shimmer="" style="background:linear-gradient(90deg,#62666d 0%,#62666d 40%,#f7f8f8 50%,#62666d 60%,#62666d 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent">Thinking…</span></div>
+                  </div>
+                  <div style="padding:12px;border:1px solid #ffffff0d;border-radius:8px;background:#141516;display:flex;flex-direction:column;gap:8px">
+                    <div style="color:#d0d6e0">"24 hour HVAC near Dublin"</div>
+                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#62666d"><span>Google AI</span><span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#27a644"></span>Named you 2nd</span></div>
+                  </div>
+                </div>
+                <div style="margin-top:auto;padding:12px 16px;border-top:1px solid #ffffff0d;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d;display:flex;justify-content:space-between"><span>40 answers checked</span><span>10 named you</span></div>
+              </div>
+
+            </div>
+          </div>
+          <div data-only="narrow">
+            <div style="position:relative;display:flex;flex-direction:column;font-size:13px;line-height:1.4;letter-spacing:-0.01em">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid #ffffff0d;color:#8a8f98">
+                <span style="color:#f7f8f8;font-weight:510">Hollis Heating &amp; Air</span>
+                <span style="font-family:'Berkeley Mono',ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;padding:2px 8px;border:1px solid #ffffff14;border-radius:999px">Check 6</span>
+              </div>
+              <div style="padding:18px 14px 6px;display:flex;flex-direction:column;gap:6px">
+                <div style="color:#8a8f98">How often AI recommends you · AC repair, Columbus</div>
+                <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><span style="font-size:60px;font-weight:510;letter-spacing:-0.035em;line-height:1;font-variant-numeric:tabular-nums">25%</span><span style="color:#68cc58">+5 since last check</span></div>
+              </div>
+              <div style="padding:8px 8px 4px;display:flex;flex-direction:column">
+                <div style="display:grid;grid-template-columns:20px minmax(0,1fr) 40px;gap:10px;align-items:center;padding:9px 10px;border-bottom:1px solid #ffffff0d;color:#d0d6e0"><span style="color:#62666d">1</span><span style="display:flex;flex-direction:column;gap:6px;min-width:0"><span>Kestrel Heating</span><span style="height:3px;border-radius:2px;background:#232326"><span style="display:block;height:3px;border-radius:2px;width:75%;background:#8a8f98"></span></span></span><span style="text-align:right;font-variant-numeric:tabular-nums">75%</span></div><div style="display:grid;grid-template-columns:20px minmax(0,1fr) 40px;gap:10px;align-items:center;padding:9px 10px;border-bottom:1px solid #ffffff0d;color:#d0d6e0"><span style="color:#62666d">2</span><span style="display:flex;flex-direction:column;gap:6px;min-width:0"><span>Larkspur Climate Co.</span><span style="height:3px;border-radius:2px;background:#232326"><span style="display:block;height:3px;border-radius:2px;width:60%;background:#8a8f98"></span></span></span><span style="text-align:right;font-variant-numeric:tabular-nums">60%</span></div><div style="display:grid;grid-template-columns:20px minmax(0,1fr) 40px;gap:10px;align-items:center;padding:9px 10px;border-bottom:1px solid #ffffff0d;color:#d0d6e0"><span style="color:#62666d">3</span><span style="display:flex;flex-direction:column;gap:6px;min-width:0"><span>Northgate Furnace</span><span style="height:3px;border-radius:2px;background:#232326"><span style="display:block;height:3px;border-radius:2px;width:45%;background:#8a8f98"></span></span></span><span style="text-align:right;font-variant-numeric:tabular-nums">45%</span></div><div style="display:grid;grid-template-columns:20px minmax(0,1fr) 40px;gap:10px;align-items:center;padding:9px 10px;margin:2px 0;border:1px solid rgba(233,182,56,.45);border-radius:6px;background:rgba(233,182,56,.06);color:#f7f8f8"><span style="color:#e9b638">4</span><span style="display:flex;flex-direction:column;gap:6px;min-width:0"><span style="font-weight:510">Hollis Heating &amp; Air <span style="color:#8a8f98;font-weight:400">· you</span></span><span style="height:3px;border-radius:2px;background:#232326"><span style="display:block;height:3px;border-radius:2px;width:25%;background:#e9b638"></span></span></span><span style="text-align:right;color:#e9b638;font-variant-numeric:tabular-nums">25%</span></div><div style="display:grid;grid-template-columns:20px minmax(0,1fr) 40px;gap:10px;align-items:center;padding:9px 10px;border-bottom:1px solid #ffffff0d;color:#d0d6e0"><span style="color:#62666d">5</span><span style="display:flex;flex-direction:column;gap:6px;min-width:0"><span>Alder Mechanical</span><span style="height:3px;border-radius:2px;background:#232326"><span style="display:block;height:3px;border-radius:2px;width:10%;background:#8a8f98"></span></span></span><span style="text-align:right;font-variant-numeric:tabular-nums">10%</span></div>
+              </div>
+              <div style="margin:8px;padding:12px;border:1px solid #ffffff0d;border-radius:8px;background:#141516;display:flex;flex-direction:column;gap:8px">
+                <div style="color:#d0d6e0">"furnace repair Columbus"</div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:#62666d"><span>Gemini</span><span style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:#27a644"></span>Named you first</span></div>
+              </div>
+              <div style="padding:10px 14px;border-top:1px solid #ffffff0d;font-family:'Berkeley Mono',ui-monospace,'SF Mono',Menlo,monospace;font-size:11px;color:#62666d;display:flex;justify-content:space-between"><span>40 answers checked</span><span>10 named you</span></div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Assistants" style="background:#08090a;padding:clamp(56px,7vw,88px) 0 0">
+    <div style="overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 64px,#000 calc(100% - 64px),transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 64px,#000 calc(100% - 64px),transparent)">
+      <div data-marquee="34" style="display:flex;width:max-content">
+        <div style="display:flex;gap:72px;padding-right:72px;font-size:22px;font-weight:510;letter-spacing:-0.02em;color:rgba(233,233,230,.5);white-space:nowrap">
+          <span>ChatGPT</span><span>Gemini</span><span>Perplexity</span><span>Google AI Overviews</span><span>Copilot</span><span>Claude</span><span>Meta AI</span>
+        </div>
+        <div style="display:flex;gap:72px;padding-right:72px;font-size:22px;font-weight:510;letter-spacing:-0.02em;color:rgba(233,233,230,.5);white-space:nowrap">
+          <span>ChatGPT</span><span>Gemini</span><span>Perplexity</span><span>Google AI Overviews</span><span>Copilot</span><span>Claude</span><span>Meta AI</span>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1200px;margin:0 auto;padding:18px clamp(20px,4vw,40px) 0;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#62666d">The assistants your customers already ask</div>
+  </section>
+
+  <section data-screen-label="03 Manifesto" style="background:#08090a;padding:clamp(120px,16vw,200px) 0">
+    <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px)">
+      <p data-manifesto="" style="margin:0;max-width:22em;font-size:clamp(26px,3.4vw,42px);font-weight:510;line-height:1.2;letter-spacing:-0.022em;color:#62666d;text-wrap:pretty"><span data-w="">Your</span> <span data-w="">customers</span> <span data-w="">stopped</span> <span data-w="">scrolling</span> <span data-w="">search</span> <span data-w="">results.</span> <span data-w="">They</span> <span data-w="">ask</span> <span data-w="">a</span> <span data-w="">chatbot</span> <span data-w="">who</span> <span data-w="">to</span> <span data-w="">call,</span> <span data-w="">and</span> <span data-w="">they</span> <span data-w="">call</span> <span data-w="">the</span> <span data-w="">first</span> <span data-w="">name</span> <span data-w="">it</span> <span data-w="">gives.</span> <span data-w="">Most</span> <span data-w="">weeks,</span> <span data-w="">that</span> <span data-w="">name</span> <span data-w="">isn't</span> <span data-w="">yours.</span> <span data-w="">Foundash</span> <span data-w="">counts</span> <span data-w="">how</span> <span data-w="">often</span> <span data-w="">it</span> <span data-w="">is,</span> <span data-w="">and</span> <span data-w="">fixes</span> <span data-w="">your</span> <span data-w="">website</span> <span data-w="">so</span> <span data-w="">the</span> <span data-w="">answer</span> <span data-w="">changes.</span></p>
+    </div>
+  </section>
+
+  <section data-screen-label="04 What you get" style="background:#08090a;padding:0 0 clamp(120px,14vw,180px)">
+    <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));border-top:1px solid #ffffff0d">
+
+      <div data-reveal="0" data-fig="" style="padding:28px 24px 8px 0;display:flex;flex-direction:column;gap:18px;border-bottom:1px solid #ffffff0d">
+        <div style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;color:#62666d">FIG 0.1</div>
+        <div style="position:relative;height:220px;border-radius:12px;overflow:hidden;border:1px solid #ffffff0d;background:radial-gradient(120% 90% at 50% 110%,#1c2633,#10161f 55%,#08090a)">
+          <div data-stars="14" style="position:absolute;inset:0"></div>
+          <div style="position:absolute;left:50%;top:22px;bottom:22px;border-left:1px dashed rgba(233,182,56,.25)"></div>
+          <div data-hov="translateY(0px)" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:translateY(28px);transition:transform .7s cubic-bezier(.32,.72,0,1)">
+            <div style="width:100px;height:100px;border:1px solid rgba(233,182,56,.5);transform:rotateX(60deg) rotateZ(45deg)"></div>
+          </div>
+          <div data-hov="translateY(-6px)" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:translateY(10px);transition:transform .7s cubic-bezier(.32,.72,0,1) .06s">
+            <div style="width:100px;height:100px;border:1px solid rgba(233,182,56,.7);transform:rotateX(60deg) rotateZ(45deg)"></div>
+          </div>
+          <div data-hov="translateY(-40px)" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:translateY(-8px);transition:transform .7s cubic-bezier(.32,.72,0,1) .12s">
+            <div style="width:100px;height:100px;border:1px solid #e9b638;background:rgba(233,182,56,.08);transform:rotateX(60deg) rotateZ(45deg)"></div>
+          </div>
+          <div style="position:absolute;right:12px;bottom:10px;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:10px;color:rgba(233,182,56,.7)">25%</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:17px;font-weight:510;color:#f7f8f8">One number.</div>
+          <div style="color:#8a8f98;max-width:32ch">How often AI names you when someone in your town asks, measured the same way every time.</div>
+        </div>
+      </div>
+
+      <div data-reveal="100" data-fig="" style="padding:28px 24px 8px 0;display:flex;flex-direction:column;gap:18px;border-bottom:1px solid #ffffff0d">
+        <div style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;color:#62666d">FIG 0.2</div>
+        <div style="position:relative;height:220px;border-radius:12px;overflow:hidden;border:1px solid #ffffff0d;background:radial-gradient(120% 90% at 50% 110%,#1c2633,#10161f 55%,#08090a)">
+          <div data-stars="14" style="position:absolute;inset:0"></div>
+          <div style="position:absolute;left:24px;right:24px;bottom:40px;border-top:1px dashed rgba(233,182,56,.25)"></div>
+          <div style="position:absolute;left:0;right:0;bottom:40px;display:flex;align-items:flex-end;justify-content:center;gap:14px">
+            <div data-hov="translateY(-4px)" style="width:20px;height:120px;border:1px solid rgba(233,182,56,.55);border-bottom:0;transition:transform .7s cubic-bezier(.32,.72,0,1)"></div>
+            <div data-hov="translateY(-4px)" style="width:20px;height:96px;border:1px solid rgba(233,182,56,.55);border-bottom:0;transition:transform .7s cubic-bezier(.32,.72,0,1) .05s"></div>
+            <div data-hov="translateY(-4px)" style="width:20px;height:72px;border:1px solid rgba(233,182,56,.55);border-bottom:0;transition:transform .7s cubic-bezier(.32,.72,0,1) .1s"></div>
+            <div data-hov="translateY(-22px)" style="width:20px;height:40px;border:1px solid #e9b638;border-bottom:0;background:rgba(233,182,56,.14);transition:transform .7s cubic-bezier(.32,.72,0,1) .15s"></div>
+            <div data-hov="translateY(-4px)" style="width:20px;height:18px;border:1px solid rgba(233,182,56,.55);border-bottom:0;transition:transform .7s cubic-bezier(.32,.72,0,1) .2s"></div>
+          </div>
+          <div style="position:absolute;left:24px;bottom:16px;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:10px;color:rgba(233,182,56,.7)">1 · 2 · 3 · YOU · 5</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:17px;font-weight:510;color:#f7f8f8">Every shop in town, ranked.</div>
+          <div style="color:#8a8f98;max-width:32ch">You see who AI picks instead of you, and how often.</div>
+        </div>
+      </div>
+
+      <div data-reveal="200" data-fig="" style="padding:28px 24px 8px 0;display:flex;flex-direction:column;gap:18px;border-bottom:1px solid #ffffff0d">
+        <div style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;color:#62666d">FIG 0.3</div>
+        <div style="position:relative;height:220px;border-radius:12px;overflow:hidden;border:1px solid #ffffff0d;background:radial-gradient(120% 90% at 50% 110%,#1c2633,#10161f 55%,#08090a)">
+          <div data-stars="14" style="position:absolute;inset:0"></div>
+          <div style="position:absolute;left:50%;bottom:34px;width:0;height:0">
+            <div data-hov="translate(-50%,0) rotate(-30deg)" style="position:absolute;left:0;bottom:0;width:72px;height:100px;border:1px solid rgba(233,182,56,.45);border-radius:4px;transform-origin:50% 100%;transform:translate(-50%,0) rotate(-14deg);transition:transform .7s cubic-bezier(.32,.72,0,1)"></div>
+            <div data-hov="translate(-50%,0) rotate(-10deg)" style="position:absolute;left:0;bottom:0;width:72px;height:100px;border:1px solid rgba(233,182,56,.6);border-radius:4px;transform-origin:50% 100%;transform:translate(-50%,0) rotate(-5deg);transition:transform .7s cubic-bezier(.32,.72,0,1) .05s"></div>
+            <div data-hov="translate(-50%,0) rotate(10deg)" style="position:absolute;left:0;bottom:0;width:72px;height:100px;border:1px solid rgba(233,182,56,.75);border-radius:4px;transform-origin:50% 100%;transform:translate(-50%,0) rotate(5deg);transition:transform .7s cubic-bezier(.32,.72,0,1) .1s"></div>
+            <div data-hov="translate(-50%,0) rotate(30deg)" style="position:absolute;left:0;bottom:0;width:72px;height:100px;border:1px solid #e9b638;background:rgba(233,182,56,.08);border-radius:4px;transform-origin:50% 100%;transform:translate(-50%,0) rotate(14deg);transition:transform .7s cubic-bezier(.32,.72,0,1) .15s"></div>
+          </div>
+          <div style="position:absolute;right:12px;bottom:10px;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:10px;color:rgba(233,182,56,.7)">6 CHANGES</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:17px;font-weight:510;color:#f7f8f8">Every change, written down.</div>
+          <div style="color:#8a8f98;max-width:32ch">Each change we make, with the date and what your number did after.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="how" data-pin="walk" data-screen-label="05 How it works" style="position:relative;height:420svh;background:#08090a">
+    <div style="position:sticky;top:0;height:100svh;overflow:hidden">
+      <div style="position:absolute;inset:0;background:#0f1a2e url('art/sky-night.jpg') center bottom / cover no-repeat"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,#08090a 0%,rgba(8,9,10,.35) 22%,rgba(8,9,10,.15) 60%,rgba(8,9,10,.55) 100%)"></div>
+      <div style="position:absolute;inset:0;opacity:calc(var(--p,0) * .45);background:linear-gradient(180deg,#08090a 0%,#1c2633 18%,#3b4a5a 46%,#8f99a3 70%,#d3d6d8 76%,#08090a 100%)"></div>
+
+      <div style="position:relative;height:100%;display:flex;flex-direction:column;padding:92px 0 22px">
+      <div style="width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:flex;justify-content:space-between;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a8f98">
+        <span>How it works</span><span data-walk-count="">01 / 04</span>
+      </div>
+      <div style="flex:1;min-height:0;display:grid;overflow:hidden">
+
+      <div data-band="0" style="grid-area:1 / 1;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">We ask what your customers ask.</h2>
+          <p style="margin:0;font-size:18px;line-height:1.55;color:#d0d6e0;max-width:36ch">The real questions, asked several times each, on ChatGPT, Gemini, Perplexity and Google.</p>
+        </div>
+        <div style="border-radius:12px;border:1px solid #ffffff14;background:rgba(15,16,17,.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:8px;font-size:13px;line-height:1.4;max-width:460px">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:10px 12px;border-bottom:1px solid #ffffff0d"><span style="color:#d0d6e0">"best AC repair near me"</span><span style="color:#62666d">ChatGPT</span></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:10px 12px;border-bottom:1px solid #ffffff0d"><span style="color:#d0d6e0">"furnace making a banging noise"</span><span style="color:#62666d">Gemini</span></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:10px 12px;border-bottom:1px solid #ffffff0d"><span style="color:#d0d6e0">"who installs heat pumps in Dublin"</span><span style="color:#62666d">Perplexity</span></div>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:10px 12px"><span style="color:#d0d6e0">"emergency AC repair tonight"</span><span style="color:#62666d">Google AI</span></div>
+          <div style="padding:8px 12px;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">+ 36 more</div>
+        </div>
+      </div>
+
+      <div data-band="1" style="grid-area:1 / 1;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start;opacity:0">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">We count how often you're named.</h2>
+          <p style="margin:0;font-size:18px;line-height:1.55;color:#d0d6e0;max-width:36ch">If AI names you in 10 of 40 answers, you show up 25% of the time.</p>
+        </div>
+        <div style="border-radius:12px;border:1px solid #ffffff14;background:rgba(15,16,17,.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:22px 24px;font-size:13px;line-height:1.4;max-width:460px;display:flex;flex-direction:column;gap:14px">
+          <div style="color:#8a8f98">How often AI recommends you</div>
+          <div style="display:flex;align-items:baseline;gap:16px"><span style="font-size:88px;font-weight:510;letter-spacing:-0.04em;line-height:.9;font-variant-numeric:tabular-nums">25%</span><span style="color:#8a8f98">10 of 40 answers</span></div>
+          <div style="height:4px;border-radius:2px;background:#232326"><div style="height:4px;width:25%;border-radius:2px;background:#e9b638;box-shadow:0 0 10px rgba(233,182,56,.6)"></div></div>
+        </div>
+      </div>
+
+      <div data-band="2" style="grid-area:1 / 1;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start;opacity:0">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">We fix your site.</h2>
+          <p style="margin:0;font-size:18px;line-height:1.55;color:#d0d6e0;max-width:36ch">We write down where you work and what you do, in words AI can read.</p>
+        </div>
+        <div style="border-radius:12px;border:1px solid #ffffff14;background:rgba(15,16,17,.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:8px;font-size:13px;line-height:1.4;max-width:460px">
+          <div style="display:grid;grid-template-columns:8px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #ffffff0d"><span style="width:6px;height:6px;border-radius:50%;background:#27a644"></span><span style="color:#d0d6e0">Listed every town you serve</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">DONE</span></div>
+          <div style="display:grid;grid-template-columns:8px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #ffffff0d"><span style="width:6px;height:6px;border-radius:50%;background:#27a644"></span><span style="color:#d0d6e0">Put your hours on every page</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">DONE</span></div>
+          <div style="display:grid;grid-template-columns:8px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px"><span data-pulse="233,182,56" style="width:6px;height:6px;border-radius:50%;background:#e9b638"></span><span style="color:#d0d6e0">One page for each service</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#e9b638">WORKING</span></div>
+        </div>
+      </div>
+
+      <div data-band="3" style="grid-area:1 / 1;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start;opacity:0">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">Then we ask again.</h2>
+          <p style="margin:0;font-size:18px;line-height:1.55;color:#d0d6e0;max-width:36ch">We ask the same questions the same way, so you can see whether your number moved.</p>
+        </div>
+        <div style="border-radius:12px;border:1px solid #ffffff14;background:rgba(15,16,17,.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:20px 22px;font-size:13px;line-height:1.4;max-width:460px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;justify-content:space-between;color:#8a8f98"><span>Last 8 checks</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">EXAMPLE</span></div>
+          <div style="display:flex;align-items:flex-end;gap:8px;height:96px">
+            <div style="flex:1;height:30%;border-radius:3px 3px 0 0;background:#34343a"></div>
+            <div style="flex:1;height:30%;border-radius:3px 3px 0 0;background:#34343a"></div>
+            <div style="flex:1;height:36%;border-radius:3px 3px 0 0;background:#34343a"></div>
+            <div style="flex:1;height:40%;border-radius:3px 3px 0 0;background:#34343a"></div>
+            <div style="flex:1;height:48%;border-radius:3px 3px 0 0;background:#34343a"></div>
+            <div style="flex:1;height:52%;border-radius:3px 3px 0 0;background:#34343a"></div>
+            <div style="flex:1;height:62%;border-radius:3px 3px 0 0;background:#34343a"></div>
+            <div style="flex:1;height:76%;border-radius:3px 3px 0 0;background:#e9b638;box-shadow:0 0 14px rgba(233,182,56,.45)"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-variant-numeric:tabular-nums"><span style="color:#8a8f98">Check 1 · 12%</span><span style="color:#f7f8f8">Check 8 · 30%</span></div>
+        </div>
+      </div>
+
+      </div>
+      <div style="width:100%;max-width:1200px;margin:0 auto;padding:16px clamp(20px,4vw,40px) 0;display:flex;justify-content:space-between;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#d0d6e0">
+        <span>After every change</span><span>Keep scrolling</span>
+      </div>
+      </div>
+      <div style="position:absolute;left:0;right:0;bottom:0;height:2px;background:#63745b;transform-origin:0 50%;transform:scaleX(var(--p,0))"></div>
+    </div>
+  </section>
+
+  <section data-pin="friction" data-screen-label="06 The problem" style="position:relative;height:350svh;background:#08090a">
+    <div style="position:sticky;top:0;height:100svh;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(70% 55% at 72% 55%,rgba(28,38,51,.9),transparent 70%),linear-gradient(180deg,#08090a 0%,#10161f 30%,#141c27 60%,#0c1117 82%,#08090a 100%);opacity:var(--night,0)"></div>
+      <div style="position:absolute;inset:0;background:#a93832;opacity:var(--red,0)"></div>
+      <div style="position:relative;height:100%;display:flex;flex-direction:column;padding:clamp(96px,14vh,140px) 0 clamp(24px,5vh,48px)">
+        <div style="width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px)">
+          <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">Word of mouth worked fine.<br><span style="font-family:'EB Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:1.08em;color:#fbfaf7;opacity:var(--awk,0)">Until the mouth was a chatbot.</span></h2>
+        </div>
+        <div style="flex:1;min-height:0;display:grid;margin-top:clamp(20px,5vh,48px)">
+          <div style="grid-area:1 / 1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:clamp(20px,5vh,48px);opacity:var(--stream,1)">
+            <div style="width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:flex;flex-direction:column;gap:18px;opacity:var(--awk,0)">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px">
+              <span style="position:relative;display:inline-block;font-size:clamp(24px,3.2vw,40px);font-weight:510;letter-spacing:-0.02em;line-height:1.15">Hollis Heating &amp; Air
+                <svg viewBox="0 0 100 10" preserveAspectRatio="none" style="position:absolute;left:-2%;top:52%;width:104%;height:10px;overflow:visible;transform:translateY(-50%)"><line x1="0" y1="5" x2="100" y2="5" pathLength="1" stroke="#f7f8f8" stroke-width="1.5" vector-effect="non-scaling-stroke" style="stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--c1,0))"></line></svg>
+              </span>
+              <span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:var(--c1,0)">Not named · 3 of 4 answers</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px">
+              <span style="position:relative;display:inline-block;font-size:clamp(24px,3.2vw,40px);font-weight:510;letter-spacing:-0.02em;line-height:1.15">"Guaranteed more calls in 30 days."
+                <svg viewBox="0 0 100 10" preserveAspectRatio="none" style="position:absolute;left:-2%;top:52%;width:104%;height:10px;overflow:visible;transform:translateY(-50%)"><line x1="0" y1="5" x2="100" y2="5" pathLength="1" stroke="#f7f8f8" stroke-width="2.5" vector-effect="non-scaling-stroke" style="stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--c2,0))"></line></svg>
+              </span>
+              <span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:var(--c2,0)">Nobody can promise that.</span>
+            </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px;font-size:clamp(16px,1.6vw,20px);color:rgba(247,248,248,.55);white-space:nowrap">
+              <div data-marquee="48" style="display:flex;width:max-content"><span style="padding-right:48px">"For AC repair in Columbus, I'd call Kestrel Heating &amp; Cooling."  ·  "Top picks: Larkspur Climate Co. and Northgate Furnace."  ·  "Kestrel Heating has strong reviews and same-day service."</span><span style="padding-right:48px">"For AC repair in Columbus, I'd call Kestrel Heating &amp; Cooling."  ·  "Top picks: Larkspur Climate Co. and Northgate Furnace."  ·  "Kestrel Heating has strong reviews and same-day service."</span></div>
+              <div data-marquee="60" data-dir="-1" style="display:flex;width:max-content"><span style="padding-right:48px">"Here are three highly rated HVAC companies near you…"  ·  "Larkspur Climate Co. serves Dublin and Westerville."  ·  "You could also try Alder Mechanical."</span><span style="padding-right:48px">"Here are three highly rated HVAC companies near you…"  ·  "Larkspur Climate Co. serves Dublin and Westerville."  ·  "You could also try Alder Mechanical."</span></div>
+              <div data-marquee="54" style="display:flex;width:max-content"><span style="padding-right:48px">"Northgate Furnace offers 24/7 emergency calls."  ·  "Most people in Columbus recommend Kestrel Heating."  ·  "I'd start with Larkspur Climate Co."</span><span style="padding-right:48px">"Northgate Furnace offers 24/7 emergency calls."  ·  "Most people in Columbus recommend Kestrel Heating."  ·  "I'd start with Larkspur Climate Co."</span></div>
+            </div>
+          </div>
+          <div style="grid-area:1 / 1;min-height:0;width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px 48px;align-items:center;opacity:var(--illo,0);transform:translateY(calc((1 - var(--illo,0)) * 56px))">
+            <p style="margin:0;max-width:22ch;font-size:clamp(22px,2.4vw,30px);font-weight:510;line-height:1.2;letter-spacing:-0.02em">We show you the real number. <span style="font-family:'EB Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:1.08em;color:#fbfaf7">Then we work on moving it.</span></p>
+            <div style="height:min(46vh,420px);mask-image:linear-gradient(180deg,#000 72%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 72%,transparent)">
+              <img src="art/van-owner.jpg" alt="A tradesman in his van at night, looking at his phone" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center 40%;border-radius:12px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="report" data-screen-label="07 The report" style="background:linear-gradient(180deg,#08090a 0%,#0a0c0f 18%,#08090a 40%);padding:clamp(110px,13vw,170px) 0 0">
+    <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px 48px;align-items:end">
+        <h2 data-reveal="0" style="margin:0;font-size:clamp(34px,4.4vw,52px);font-weight:510;line-height:1.02;letter-spacing:-0.022em">You get a report after every check.</h2>
+        <p data-reveal="100" style="margin:0;font-size:20px;line-height:1.5;color:#8a8f98;max-width:38ch;text-wrap:pretty">Your number is at the top, with every shop in town and what we changed since the last check underneath.</p>
+      </div>
+      <div data-reveal="200" style="position:relative;margin-top:56px;border-radius:20px;padding:clamp(14px,4vw,56px);overflow:hidden;border:1px solid #ffffff0d;background:radial-gradient(110% 80% at 70% 0%,#1c2633,#10161f 50%,#08090a 100%)">
+        <div data-stars="40" style="position:absolute;inset:0"></div>
+        <div data-shine-frame="" style="position:relative;border-radius:12px;border:1px solid #ffffff14;background:rgba(11,12,13,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+          <div style="position:absolute;inset:-1px;border-radius:12px;border:1px solid rgba(255,255,255,.35);pointer-events:none;mask-image:radial-gradient(240px 170px at var(--mx,0%) 0%,#000,transparent 70%);-webkit-mask-image:radial-gradient(240px 170px at var(--mx,0%) 0%,#000,transparent 70%)"></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));font-size:13px;line-height:1.4">
+            <div style="padding:22px 24px;display:flex;flex-direction:column;gap:10px;border-right:1px solid #ffffff0d">
+              <div style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.06em;color:#62666d">EXAMPLE REPORT · OCT 19</div>
+              <div style="color:#8a8f98">How often AI recommends you</div>
+              <div style="font-size:64px;font-weight:510;letter-spacing:-0.035em;line-height:1;font-variant-numeric:tabular-nums">25%</div>
+              <div style="color:#68cc58">+5 since last check</div>
+              <div style="display:flex;align-items:flex-end;gap:6px;height:64px;margin-top:8px">
+                <div style="flex:1;height:36%;border-radius:2px;background:#34343a"></div>
+                <div style="flex:1;height:36%;border-radius:2px;background:#34343a"></div>
+                <div style="flex:1;height:42%;border-radius:2px;background:#34343a"></div>
+                <div style="flex:1;height:46%;border-radius:2px;background:#34343a"></div>
+                <div style="flex:1;height:52%;border-radius:2px;background:#34343a"></div>
+                <div style="flex:1;height:60%;border-radius:2px;background:#34343a"></div>
+                <div style="flex:1;height:60%;border-radius:2px;background:#34343a"></div>
+                <div style="flex:1;height:75%;border-radius:2px;background:#e9b638"></div>
+              </div>
+            </div>
+            <div style="padding:22px 24px;display:flex;flex-direction:column;gap:12px;border-right:1px solid #ffffff0d">
+              <div style="color:#f7f8f8;font-weight:510">Who AI named instead</div>
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) 40px;gap:4px 12px;color:#d0d6e0">
+                <span>Kestrel Heating</span><span style="text-align:right;font-variant-numeric:tabular-nums">75%</span>
+                <span style="grid-column:1 / -1;height:3px;border-radius:2px;background:#232326;margin-bottom:8px"><span style="display:block;height:3px;width:75%;border-radius:2px;background:#8a8f98"></span></span>
+                <span>Larkspur Climate</span><span style="text-align:right;font-variant-numeric:tabular-nums">60%</span>
+                <span style="grid-column:1 / -1;height:3px;border-radius:2px;background:#232326;margin-bottom:8px"><span style="display:block;height:3px;width:60%;border-radius:2px;background:#8a8f98"></span></span>
+                <span>Northgate Furnace</span><span style="text-align:right;font-variant-numeric:tabular-nums">45%</span>
+                <span style="grid-column:1 / -1;height:3px;border-radius:2px;background:#232326"><span style="display:block;height:3px;width:45%;border-radius:2px;background:#8a8f98"></span></span>
+              </div>
+            </div>
+            <div style="padding:22px 24px;display:flex;flex-direction:column;gap:12px">
+              <div style="color:#f7f8f8;font-weight:510">What we changed</div>
+              <div style="display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px 12px;color:#d0d6e0">
+                <span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d;padding-top:1px">OCT 12</span><span>Listed every town you serve</span>
+                <span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d;padding-top:1px">OCT 14</span><span>Put your hours on every page</span>
+                <span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d;padding-top:1px">OCT 16</span><span>New page: furnace repair</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="fix" data-screen-label="08 The fix" style="background:#08090a;padding:clamp(110px,13vw,170px) 0 0">
+    <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:20px 48px;align-items:end">
+        <h2 data-reveal="0" style="margin:0;font-size:clamp(34px,4.4vw,52px);font-weight:510;line-height:1.02;letter-spacing:-0.022em">We fix your website for you.</h2>
+        <p data-reveal="100" style="margin:0;font-size:20px;line-height:1.5;color:#8a8f98;max-width:38ch;text-wrap:pretty">We change your site so AI can read it, and list every change with its date.</p>
+      </div>
+      <div data-reveal="200" style="position:relative;margin-top:56px;border-radius:20px;padding:clamp(14px,4vw,56px);overflow:hidden;border:1px solid #ffffff0d;background:radial-gradient(110% 80% at 25% 0%,#1c2633,#10161f 50%,#08090a 100%)">
+        <div data-stars="40" style="position:absolute;inset:0"></div>
+        <div data-shine-frame="" style="position:relative;border-radius:12px;border:1px solid #ffffff14;background:rgba(11,12,13,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);font-size:13px;line-height:1.45">
+          <div style="position:absolute;inset:-1px;border-radius:12px;border:1px solid rgba(255,255,255,.35);pointer-events:none;mask-image:radial-gradient(240px 170px at var(--mx,0%) 0%,#000,transparent 70%);-webkit-mask-image:radial-gradient(240px 170px at var(--mx,0%) 0%,#000,transparent 70%)"></div>
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid #ffffff0d;color:#8a8f98">
+            <span style="white-space:nowrap"><span style="color:#f7f8f8">Example site</span> · 6 changes</span>
+            <span style="display:flex;align-items:center;gap:8px;font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;padding:2px 10px;border:1px solid #ffffff14;border-radius:999px"><span data-pulse="39,166,68" style="width:6px;height:6px;border-radius:50%;background:#27a644"></span>LIVE SINCE OCT 12</span>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <div style="padding:16px 20px;display:flex;flex-direction:column;gap:6px;border-bottom:1px solid #ffffff0d">
+              <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#f7f8f8;font-weight:510">Service area</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">OCT 12</span></div>
+              <div style="display:grid;grid-template-columns:18px minmax(0,1fr);padding:6px 10px;border-radius:4px;background:rgba(235,87,87,.08);color:#8a8f98"><span style="color:#eb5757">−</span><span>Serving Central Ohio</span></div>
+              <div data-flash="" style="display:grid;grid-template-columns:18px minmax(0,1fr);padding:6px 10px;border-radius:4px;background:rgba(39,166,68,.10);color:#d0d6e0"><span style="color:#27a644">+</span><span>AC and furnace repair in Columbus, Dublin, Westerville and Hilliard</span></div>
+            </div>
+            <div style="padding:16px 20px;display:flex;flex-direction:column;gap:6px;border-bottom:1px solid #ffffff0d">
+              <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#f7f8f8;font-weight:510">Hours</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">OCT 14</span></div>
+              <div style="display:grid;grid-template-columns:18px minmax(0,1fr);padding:6px 10px;border-radius:4px;background:rgba(235,87,87,.08);color:#8a8f98"><span style="color:#eb5757">−</span><span>Call for hours</span></div>
+              <div data-flash="" style="display:grid;grid-template-columns:18px minmax(0,1fr);padding:6px 10px;border-radius:4px;background:rgba(39,166,68,.10);color:#d0d6e0"><span style="color:#27a644">+</span><span>Open Mon to Sat, 7am to 7pm. Emergency calls 24/7.</span></div>
+            </div>
+            <div style="padding:16px 20px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#f7f8f8;font-weight:510">Services</span><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;color:#62666d">OCT 16</span></div>
+              <div style="display:grid;grid-template-columns:18px minmax(0,1fr);padding:6px 10px;border-radius:4px;background:rgba(235,87,87,.08);color:#8a8f98"><span style="color:#eb5757">−</span><span>One page for everything</span></div>
+              <div data-flash="" style="display:grid;grid-template-columns:18px minmax(0,1fr);padding:6px 10px;border-radius:4px;background:rgba(39,166,68,.10);color:#d0d6e0"><span style="color:#27a644">+</span><span>Separate pages for AC repair, furnace repair and new installs</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="promise" data-screen-label="09 Our promise" style="background:#08090a;padding:clamp(110px,13vw,170px) 0 clamp(110px,13vw,170px)">
+    <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:40px 48px;align-items:start">
+      <h2 data-reveal="0" style="margin:0;font-size:clamp(34px,4.4vw,52px);font-weight:510;line-height:1.02;letter-spacing:-0.022em">What we can and can't promise.</h2>
+      <div data-reveal="120" style="display:flex;flex-direction:column;border-top:1px solid #ffffff14;font-size:17px;line-height:1.5">
+        <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid #ffffff0d"><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.08em;color:#68cc58;padding-top:4px">YES</span><span style="color:#d0d6e0">The real number, measured the same way every time.</span></div>
+        <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid #ffffff0d"><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.08em;color:#68cc58;padding-top:4px">YES</span><span style="color:#d0d6e0">Every change to your site, listed with the date.</span></div>
+        <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid #ffffff0d"><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.08em;color:#68cc58;padding-top:4px">YES</span><span style="color:#d0d6e0">If the number doesn't move, you see that too.</span></div>
+        <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid #ffffff0d"><span style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.08em;color:#eb5757;padding-top:4px">NO</span><span style="color:#f7f8f8">We can't promise your phone will ring, and anyone who does is guessing.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="start" data-screen-label="10 Get your number" style="position:relative;overflow:hidden;background:linear-gradient(180deg,#08090a 0%,#0f1a2e 22%,#22344d 52%,#22344d 62%,#08090a 100%)">
+    <div style="position:relative;z-index:1;max-width:820px;margin:0 auto;padding:clamp(72px,10vh,110px) clamp(20px,4vw,40px) 0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px">
+      <div data-reveal="0" style="font-family:'Berkeley Mono',ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#d0d6e0">Free first check</div>
+      <h2 data-reveal="80" style="margin:0;font-size:clamp(40px,6vw,72px);font-weight:510;line-height:1;letter-spacing:-0.022em;text-wrap:balance">See your number.<br><span style="font-family:'EB Garamond',Georgia,serif;font-style:italic;font-weight:400;font-size:1.08em;color:#f4f1e6">Then watch it move.</span></h2>
+      <p data-reveal="160" style="margin:0;font-size:17px;line-height:1.55;color:#d0d6e0;max-width:40ch">Tell us your business and your town, and we'll email you your number.</p>
+
+      <div data-form-wrap>
+        <form data-reveal="240" data-signup data-mailto="patricksmediastudio@gmail.com" style="width:100%;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:10px">
+          <input name="biz" required="" autocomplete="organization" placeholder="Business name" style="flex:1 1 180px;min-width:0;height:48px;padding:0 16px;border-radius:10px;border:1px solid #ffffff1f;background:rgba(8,9,10,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#f7f8f8;font:inherit;font-size:15px">
+          <input name="town" required="" autocomplete="address-level2" placeholder="Town" style="flex:1 1 140px;min-width:0;height:48px;padding:0 16px;border-radius:10px;border:1px solid #ffffff1f;background:rgba(8,9,10,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#f7f8f8;font:inherit;font-size:15px">
+          <input name="email" type="email" required="" autocomplete="email" placeholder="Email" style="flex:1 1 200px;min-width:0;height:48px;padding:0 16px;border-radius:10px;border:1px solid #ffffff1f;background:rgba(8,9,10,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#f7f8f8;font:inherit;font-size:15px">
+          <button type="submit" style="position:relative;overflow:hidden;flex:0 0 auto;height:48px;padding:0 22px;border:0;border-radius:999px;background:#f7f8f8;color:#08090a;font:inherit;font-size:15px;font-weight:510;cursor:pointer;transition:filter .16s cubic-bezier(.25,.46,.45,.94)" data-h class="h7">
+            <span data-sweep="3000" style="position:absolute;top:-30%;bottom:-30%;left:0;width:42%;background:linear-gradient(90deg,transparent,rgba(233,182,56,.6),transparent);transform:translateX(-140%) skewX(-18deg);pointer-events:none"></span>
+            <span style="position:relative">Get my number</span>
+          </button>
+        </form>
+      </div>
+      <div data-thanks hidden>
+        <div style="margin-top:10px;padding:18px 22px;border-radius:12px;border:1px solid #ffffff1f;background:rgba(8,9,10,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:4px;max-width:480px">
+          <span style="font-weight:510;font-size:17px">Got it.</span>
+          <span style="color:#d0d6e0">We're checking <span data-sent-biz></span>. Your number goes to <span data-sent-email></span>.</span>
+        </div>
+      </div>
+    </div>
+      <div style="position:relative;margin-top:clamp(-110px,-7vw,-32px)">
+      <img src="art/dawn.jpg" alt="A lakeside town at sunrise" style="display:block;width:100%;height:auto;min-height:260px;object-fit:cover;object-position:center 40%;mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 80%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 80%,transparent 100%)">
+      <div data-motes="18" style="position:absolute;left:0;right:0;top:45%;bottom:10%;pointer-events:none"></div>
+      <div data-smoke="" style="position:absolute;left:36.7%;top:53%;width:0;height:0;pointer-events:none"></div>
+    </div>
+  </section>
+
+  <footer data-screen-label="11 Footer" style="background:#08090a;border-top:1px solid #ffffff0d;padding:64px 0 40px">
+    <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:flex;flex-direction:column;gap:48px">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:40px">
+        <div style="display:flex;align-items:center;gap:10px;font-weight:590;font-size:16px">
+          <span role="img" aria-label="foundash" style="display:block;width:118px;height:30px;overflow:hidden">
+            <img src="logo-white.png" alt="" style="display:block;width:130px;height:auto;margin:-14px 0 0 -6px">
+          </span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:40px 72px;font-size:13px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="color:#f7f8f8;font-weight:510">Product</span>
+            <a href="#how" style="color:#8a8f98" data-h class="h8">How it works</a>
+            <a href="#report" style="color:#8a8f98" data-h class="h9">The report</a>
+            <a href="#fix" style="color:#8a8f98" data-h class="h10">The fix</a>
+          <a href="https://wordpress.org/plugins/foundash-ai-access-check/" style="color:#8a8f98" data-h class="h10">Free WordPress plugin</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="color:#f7f8f8;font-weight:510">Company</span>
+            <a href="#promise" style="color:#8a8f98" data-h class="h11">Our promise</a>
+            <a href="#start" style="color:#8a8f98" data-h class="h12">Get your number</a>
+          <a href="research/" style="color:#8a8f98" data-h class="h11">Research</a>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:12px;color:#62666d">
+        <span>© 2026 Foundash</span><span>How often AI recommends you.</span><span>Businesses and numbers shown are examples.</span>
+      </div>
+    </div>
+  </footer>
+
+  <div data-keep>
+    <a href="#start" data-pill="" style="position:fixed;right:20px;bottom:20px;z-index:55;width:196px;height:60px;border-radius:999px;background:#f7f8f8;color:#08090a;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:510;overflow:hidden;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)">
+      <span data-sweep="4000" style="position:absolute;top:-30%;bottom:-30%;left:0;width:42%;background:linear-gradient(90deg,transparent,rgba(233,182,56,.6),transparent);transform:translateX(-140%) skewX(-18deg);pointer-events:none"></span>
+      <span style="position:relative">Get your number</span>
+    </a>
+  </div>
+
+  <div data-keep>
+    <div data-grain="" style="position:fixed;inset:-60px;z-index:60;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-image:url(&quot;data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;);background-size:256px 256px"></div>
+  </div>
+
+</div>
+<script>
+(function () {
+  var root = document.getElementById('top');
+  var mq = window.matchMedia('(max-width: 760px)');
+  var App = {
+    anims: [], cleanups: [],
+    state: { narrow: mq.matches },
+    props: { motion: true, grain: true, floatingPill: true },
+    rootRef: { current: root },
+    an: function (el, kf, opt) { var a = el.animate(kf, opt); this.anims.push(a); return a; },
+    teardown: function () {
+      this.anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+      this.anims = [];
+      this.cleanups.forEach(function (f) { f(); });
+      this.cleanups = [];
+    },
+    setup() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    const q = s => Array.from(root.querySelectorAll(s));
+    const motion = (this.props.motion ?? true)
+      && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      && !/motion=off/.test(location.search);
+    const E = {
+      ui: 'cubic-bezier(.25,.46,.45,.94)', reveal: 'cubic-bezier(.22,1,.36,1)',
+      hero: 'cubic-bezier(.455,.03,.515,.955)', pop: 'cubic-bezier(.34,1.56,.64,1)', soft: 'cubic-bezier(.4,.14,.22,1)'
+    };
+    const t0 = performance.now();
+    const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+    const easeIO = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+    // stars
+    q('[data-stars]').forEach(c => {
+      c.innerHTML = '';
+      const n = +c.dataset.stars || 40;
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement('span');
+        const sz = Math.random() < .15 ? 2 : 1;
+        s.style.cssText = `position:absolute;left:${(Math.random() * 100).toFixed(2)}%;top:${(Math.random() * 100).toFixed(2)}%;width:${sz}px;height:${sz}px;border-radius:50%;background:#fbfaf7;opacity:${(.2 + Math.random() * .6).toFixed(2)}`;
+        c.appendChild(s);
+        if (motion && Math.random() < .3) this.an(s, [{ opacity: .15 }, { opacity: .95 }, { opacity: .15 }], { duration: 2000 + Math.random() * 4000, delay: -Math.random() * 4000, iterations: Infinity, easing: 'steps(3)' });
+      }
+    });
+
+    // motes
+    q('[data-motes]').forEach(c => {
+      c.innerHTML = '';
+      if (!motion) return;
+      const n = +c.dataset.motes || 20;
+      for (let i = 0; i < n; i++) {
+        const m = document.createElement('span');
+        m.style.cssText = `position:absolute;left:${(Math.random() * 100).toFixed(2)}%;bottom:${(Math.random() * 40).toFixed(2)}%;width:2.5px;height:2.5px;border-radius:50%;background:radial-gradient(circle,#f6e7b8,rgba(233,182,56,0));box-shadow:0 0 7px rgba(233,182,56,.55);opacity:0`;
+        c.appendChild(m);
+        const sway = (Math.random() * 40 - 20).toFixed(1);
+        const dur = 16000 + Math.random() * 8000;
+        this.an(m, [
+          { transform: 'translate(0,0)', opacity: 0 },
+          { opacity: .9, offset: .12 },
+          { transform: `translate(${sway}px,-11vh)`, offset: .5 },
+          { opacity: .8, offset: .86 },
+          { transform: 'translate(0,-22vh)', opacity: 0 }
+        ], { duration: dur, delay: -Math.random() * dur, iterations: Infinity, easing: 'linear' });
+      }
+    });
+
+    // 5x5 dot loader
+    q('[data-dots]').forEach(c => {
+      c.innerHTML = '';
+      for (let i = 0; i < 25; i++) {
+        const d = document.createElement('span');
+        const r = Math.floor(i / 5), col = i % 5;
+        d.style.cssText = 'width:3px;height:3px;background:#e9b638;opacity:' + (((r + col) % 3) ? .3 : 1);
+        c.appendChild(d);
+        if (motion) this.an(d, [{ opacity: 1 }, { opacity: .3, offset: .25 }, { opacity: .3, offset: .75 }, { opacity: 1 }], { duration: 2800, delay: ((r + col) % 5) * 280, iterations: Infinity, easing: 'steps(1,end)' });
+      }
+    });
+
+    if (motion) {
+      // hero entrance — blur-up
+      q('[data-hero]').forEach(el => this.an(el,
+        [{ opacity: 0, filter: 'blur(10px)', transform: 'translateY(20%)' }, { opacity: 1, filter: 'blur(0px)', transform: 'translateY(0)' }],
+        { delay: +el.dataset.hero * 1000, duration: 1000, easing: E.reveal, fill: 'backwards' }));
+      q('[data-hero-frame]').forEach(el => this.an(el,
+        [{ opacity: 0, transform: 'translateY(24px)', offset: 0 }, { opacity: .85, offset: .2 }, { opacity: 1, transform: 'translateY(0)', offset: 1 }],
+        { delay: 1300, duration: 1500, easing: E.hero, fill: 'backwards' }));
+
+      // loops
+      q('[data-marquee]').forEach(el => {
+        const dir = +(el.dataset.dir || 1);
+        const kf = [{ transform: 'translateX(0)' }, { transform: 'translateX(-50%)' }];
+        const a = this.an(el, dir < 0 ? kf.reverse() : kf, { duration: (+el.dataset.marquee || 34) * 1000, iterations: Infinity, easing: 'linear' });
+        const pause = () => a.pause(), play = () => a.play();
+        el.addEventListener('mouseenter', pause); el.addEventListener('mouseleave', play);
+        this.cleanups.push(() => { el.removeEventListener('mouseenter', pause); el.removeEventListener('mouseleave', play); });
+      });
+      q('[data-sweep]').forEach(el => this.an(el,
+        [{ transform: 'translateX(-140%) skewX(-18deg)' }, { transform: 'translateX(360%) skewX(-18deg)', offset: .16 }, { transform: 'translateX(360%) skewX(-18deg)' }],
+        { duration: 5500, delay: +el.dataset.sweep || 0, iterations: Infinity, easing: E.soft, fill: 'backwards' }));
+      q('[data-rotor]').forEach(el => this.an(el, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], { duration: 30000, iterations: Infinity, easing: 'linear' }));
+      q('[data-star-pop]').forEach(el => this.an(el, [{ transform: 'scale(.4) rotate(-40deg)', opacity: 0 }, { transform: 'scale(1) rotate(0deg)', opacity: 1 }], { duration: 400, delay: 200, easing: E.pop, fill: 'backwards' }));
+      q('[data-pulse]').forEach(el => {
+        const c = el.dataset.pulse;
+        this.an(el, [{ boxShadow: `0 0 0 0 rgba(${c},.6)` }, { boxShadow: `0 0 0 8px rgba(${c},0)` }], { duration: 1750, iterations: Infinity, easing: 'cubic-bezier(.66,0,0,1)' });
+      });
+      q('[data-shimmer]').forEach(el => this.an(el, [{ backgroundPosition: '150% 0' }, { backgroundPosition: '-50% 0' }], { duration: 2000, iterations: Infinity, easing: 'linear' }));
+      q('[data-grain]').forEach(el => this.an(el, [{ transform: 'translate(0,0)' }, { transform: 'translate(30px,-25px)' }], { duration: 45000, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' }));
+
+      q('[data-smoke]').forEach(c => {
+      c.innerHTML = '';
+      const H = (c.parentElement.offsetHeight || 440) * .24;
+      for (let i = 0; i < 6; i++) {
+        const p = document.createElement('span');
+        p.style.cssText = 'position:absolute;left:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle,rgba(236,224,212,.55),rgba(236,224,212,0) 70%);filter:blur(2px);opacity:0';
+        c.appendChild(p);
+        const dur = 9000;
+        this.an(p, [
+          { transform: 'translate(0,0) scale(.5)', opacity: 0 },
+          { opacity: .45, offset: .15 },
+          { transform: `translate(${4}px,${-H * .45}px) scale(1.1)`, opacity: .3, offset: .5 },
+          { transform: `translate(${16}px,${-H}px) scale(2)`, opacity: 0 }
+        ], { duration: dur, delay: -i * dur / 6, iterations: Infinity, easing: 'linear' });
+      }
+    });
+
+    // in-view reveals
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target; io.unobserve(el);
+        const d = +el.dataset.reveal || 0;
+        el.style.opacity = '';
+        this.an(el, [{ opacity: 0, transform: 'translateY(26px)', filter: 'blur(9px)' }, { opacity: 1, transform: 'translateY(0)', filter: 'blur(0px)' }], { duration: 1150, delay: d, easing: E.reveal, fill: 'backwards' });
+        el.querySelectorAll('[data-flash]').forEach((f, i) => this.an(f, [{ backgroundColor: 'rgba(39,166,68,.4)' }, { backgroundColor: 'rgba(39,166,68,.10)' }], { duration: 400, delay: d + 1100 + i * 180, easing: E.ui, fill: 'backwards' }));
+      }), { rootMargin: '0px 0px -70px 0px' });
+      const revealEls = q('[data-reveal]');
+      revealEls.forEach(el => { el.style.opacity = '0'; io.observe(el); });
+      this.cleanups.push(() => { io.disconnect(); revealEls.forEach(el => { el.style.opacity = ''; }); });
+    }
+
+    // typewriter — once, then the caret blinks three times and fades
+    const tw = root.querySelector('[data-type]'), caret = root.querySelector('[data-caret]');
+    if (tw) {
+      const [w0, w1] = tw.dataset.type.split('|');
+      if (!motion) { tw.textContent = w1; if (caret) caret.style.opacity = '0'; }
+      else {
+        tw.textContent = w0; if (caret) caret.style.opacity = '';
+        const timers = []; let t = 2300;
+        for (let i = w0.length - 1; i >= 0; i--) { const s = w0.slice(0, i); timers.push(setTimeout(() => { tw.textContent = s; }, t)); t += 60; }
+        t += 160;
+        for (let i = 1; i <= w1.length; i++) { const s = w1.slice(0, i); timers.push(setTimeout(() => { tw.textContent = s; }, t)); t += 85; }
+        timers.push(setTimeout(() => {
+          if (caret) this.an(caret, [{ opacity: 1 }, { opacity: 0, offset: .16 }, { opacity: 1, offset: .33 }, { opacity: 0, offset: .5 }, { opacity: 1, offset: .66 }, { opacity: 0, offset: .83 }, { opacity: 0 }], { duration: 2100, easing: 'steps(1,end)', fill: 'forwards' });
+        }, t + 900));
+        this.cleanups.push(() => timers.forEach(clearTimeout));
+      }
+    }
+
+    // figure hover lifts
+    q('[data-fig]').forEach(fig => {
+      const kids = Array.from(fig.querySelectorAll('[data-hov]'));
+      kids.forEach(k => { k._base = k._base ?? k.style.transform; });
+      const en = () => kids.forEach(k => { k.style.transform = k.dataset.hov; });
+      const lv = () => kids.forEach(k => { k.style.transform = k._base; });
+      fig.addEventListener('mouseenter', en); fig.addEventListener('mouseleave', lv);
+      this.cleanups.push(() => { fig.removeEventListener('mouseenter', en); fig.removeEventListener('mouseleave', lv); lv(); });
+    });
+
+    // ripples on the water
+    const cv = root.querySelector('[data-ripple]'), host = root.querySelector('[data-ripple-host]');
+    if (motion && cv && host) {
+      const ctx = cv.getContext('2d');
+      let W = 0, H = 0, rip = [], lx = -999, ly = -999, running = false, rid = 0;
+      const size = () => {
+        const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+        W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      size();
+      const draw = now => {
+        ctx.clearRect(0, 0, W, H);
+        rip = rip.filter(r => now - r.t < 1900);
+        rip.forEach(r => {
+          const a = (now - r.t) / 1900, e = 1 - Math.pow(1 - a, 3);
+          [[61, 'rgba(28,38,51,', 1, .7], [85, 'rgba(251,250,247,', 0, .4]].forEach(([R, c, dy, al]) => {
+            const rad = 5 + (R - 5) * e;
+            ctx.beginPath(); ctx.ellipse(r.x, r.y + dy, rad, rad * .36, 0, 0, Math.PI * 2);
+            ctx.strokeStyle = c + ((1 - a) * al).toFixed(3) + ')'; ctx.lineWidth = 1.3 - .6 * a; ctx.stroke();
+          });
+        });
+        if (rip.length) rid = requestAnimationFrame(draw); else { running = false; ctx.clearRect(0, 0, W, H); }
+      };
+      const mv = ev => {
+        const r = cv.getBoundingClientRect(); const x = ev.clientX - r.left, y = ev.clientY - r.top;
+        if (x < 0 || y < 0 || x > W || y > H) return;
+        if (Math.hypot(x - lx, y - ly) < 28) return;
+        lx = x; ly = y; rip.push({ x, y, t: performance.now() }); if (rip.length > 40) rip.shift();
+        if (!running) { running = true; rid = requestAnimationFrame(draw); }
+      };
+      host.addEventListener('pointermove', mv); window.addEventListener('resize', size);
+      this.cleanups.push(() => { host.removeEventListener('pointermove', mv); window.removeEventListener('resize', size); cancelAnimationFrame(rid); ctx.clearRect(0, 0, W, H); });
+    }
+
+    // scroll engine
+    const header = root.querySelector('[data-header]');
+    const pill = root.querySelector('[data-pill]');
+    const cta = root.querySelector('#start');
+    const hero = root.querySelector('[data-hero-section]');
+    const frames = q('[data-shine-frame]');
+    const words = q('[data-w]');
+    const manifesto = root.querySelector('[data-manifesto]');
+    const bands = q('[data-band]');
+    const count = root.querySelector('[data-walk-count]');
+    const pins = q('[data-pin]').map(el => ({ el, kind: el.dataset.pin, x: 0, vars: {} }));
+    const staticPins = !motion;
+    if (staticPins) {
+      pins.forEach(P => {
+        const el = P.el, sticky = el.firstElementChild;
+        el.style.height = 'auto';
+        sticky.style.position = 'relative'; sticky.style.height = 'auto';
+        const stacked = Array.from(el.querySelectorAll('*')).filter(n => n.style && n.style.gridArea);
+        stacked.forEach(n => { n.style.gridArea = 'auto'; });
+        const fixedH = Array.from(sticky.querySelectorAll(':scope > div')).filter(n => n.style.height === '100%');
+        fixedH.forEach(n => { n.style.height = 'auto'; });
+        if (P.kind === 'walk') {
+          bands.forEach(b => { b.style.opacity = 1; b.style.transform = 'none'; b.style.pointerEvents = 'auto'; b.style.paddingBottom = '48px'; });
+          if (count) count.style.visibility = 'hidden';
+        } else {
+          [['--stream', 1], ['--red', 0], ['--night', 1], ['--awk', 1], ['--c1', 1], ['--c2', 1], ['--illo', 1]].forEach(([k, v]) => el.style.setProperty(k, v));
+        }
+        this.cleanups.push(() => {
+          el.style.height = ''; sticky.style.position = ''; sticky.style.height = '';
+          stacked.forEach(n => { n.style.gridArea = '1 / 1'; });
+          fixedH.forEach(n => { n.style.height = '100%'; });
+          bands.forEach(b => { b.style.paddingBottom = ''; b._op = undefined; });
+          if (count) count.style.visibility = '';
+          ['--stream', '--red', '--night', '--awk', '--c1', '--c2', '--illo', '--p'].forEach(k => el.style.removeProperty(k));
+        });
+      });
+    } else if (this.state.narrow) {
+      pins.forEach(P => {
+        P.el.style.height = P.kind === 'walk' ? '280svh' : '240svh';
+        this.cleanups.push(() => { P.el.style.height = ''; });
+      });
+    }
+    const setVar = (P, k, v) => { if (P.vars[k] === undefined || Math.abs(P.vars[k] - v) > .004 || (v === 0 || v === 1) && P.vars[k] !== v) { P.vars[k] = v; P.el.style.setProperty(k, v.toFixed(4)); } };
+    let last = performance.now(), raf = 0, lit = -1, hdr = -1, pillOn = -1, lastCount = '';
+
+    const tick = now => {
+      const dt = Math.min(100, now - last); last = now;
+      const vh = window.innerHeight, sy = window.scrollY;
+
+      const s = sy > 8 ? 1 : 0;
+      if (header && s !== hdr) {
+        hdr = s;
+        header.style.background = s ? 'rgba(8,9,10,.8)' : 'transparent';
+        header.style.borderBottomColor = s ? '#ffffff14' : 'transparent';
+        header.style.backdropFilter = header.style.webkitBackdropFilter = s ? 'blur(20px)' : 'none';
+      }
+
+      frames.forEach(f => {
+        const r = f.getBoundingClientRect(); let mx;
+        if (f.dataset.shineFrame === 'hero') {
+          const el = now - t0;
+          if (motion && el < 1900) mx = el < 1400 ? 20 : 20 * (1 - easeIO((el - 1400) / 500));
+          else mx = clamp(clamp(-r.top / r.height) / .8) * 100;
+        } else mx = clamp((vh - r.top) / (vh + r.height)) * 100;
+        if (f._mx === undefined || Math.abs(f._mx - mx) > .3) { f._mx = mx; f.style.setProperty('--mx', mx.toFixed(1) + '%'); }
+      });
+
+      if (manifesto && words.length) {
+        const r = manifesto.getBoundingClientRect();
+        const k = clamp((vh * .85 - r.top) / (r.height + vh * .3));
+        const n = Math.round(k * words.length);
+        if (n !== lit) { lit = n; words.forEach((w, i) => { w.style.color = i < n ? '#f7f8f8' : ''; w.style.transition = 'color .16s cubic-bezier(.25,.46,.45,.94)'; }); }
+      }
+
+      const kLerp = 1 - Math.pow(1 - .105, dt / 16.667);
+      if (!staticPins) pins.forEach(P => {
+        const r = P.el.getBoundingClientRect();
+        const p = clamp(-r.top / Math.max(1, r.height - vh));
+        P.x += (p - P.x) * kLerp; if (Math.abs(p - P.x) < .0005) P.x = p;
+        const x = P.x;
+        if (P.kind === 'walk') {
+          setVar(P, '--p', x);
+          bands.forEach((b, i) => {
+            const a = i / 4, e = (i + 1) / 4;
+            let op = i === 0 ? 1 : clamp((x - a) / .04);
+            if (i < 3) op *= clamp((e - x) / .04);
+            if (b._op !== op) { b._op = op; b.style.opacity = op; b.style.transform = `translateY(${((1 - op) * 14).toFixed(1)}px)`; b.style.pointerEvents = op > .5 ? 'auto' : 'none'; }
+          });
+          const c = String(Math.min(4, Math.floor(x * 4) + 1)).padStart(2, '0') + ' / 04';
+          if (count && c !== lastCount) { lastCount = c; count.textContent = c; }
+        } else if (P.kind === 'friction') {
+          setVar(P, '--stream', 1 - clamp((x - .62) / .08));
+          setVar(P, '--red', easeIO(clamp((x - .40) / .09)) * (1 - easeIO(clamp((x - .60) / .10))));
+          setVar(P, '--night', easeIO(clamp((x - .60) / .12)));
+          setVar(P, '--awk', clamp((x - .42) / .07));
+          setVar(P, '--c1', clamp((x - .50) / .06));
+          setVar(P, '--c2', clamp((x - .55) / .06));
+          setVar(P, '--illo', easeIO(clamp((x - .68) / .1)));
+        }
+      });
+
+      if (pill) {
+        const heroH = hero ? hero.offsetHeight * .7 : 600;
+        const pinned = !staticPins && pins.some(P => { const r = P.el.getBoundingClientRect(); return r.top <= 1 && r.bottom >= vh - 1; });
+        const on = sy > heroH && !pinned && (!cta || cta.getBoundingClientRect().top > vh * .55) ? 1 : 0;
+        if (on !== pillOn) { pillOn = on; pill.style.opacity = on; pill.style.transform = on ? 'translateY(0)' : 'translateY(12px)'; pill.style.pointerEvents = on ? 'auto' : 'none'; }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    this.cleanups.push(() => cancelAnimationFrame(raf));
+    }
+  };
+  App.setup();
+  mq.addEventListener('change', function () { App.teardown(); App.state.narrow = mq.matches; App.setup(); });
+
+  // sign-up form
+  var form = root.querySelector('form[data-signup]');
+  if (form) form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = new FormData(form);
+    var endpoint = form.getAttribute('data-endpoint');
+    var show = function () {
+      root.querySelector('[data-sent-biz]').textContent = f.get('biz') || 'your business';
+      root.querySelector('[data-sent-email]').textContent = f.get('email') || 'your email';
+      root.querySelector('[data-form-wrap]').hidden = true;
+      root.querySelector('[data-thanks]').hidden = false;
+    };
+    if (!endpoint) {
+      var to = form.getAttribute('data-mailto');
+      if (!to) { alert('Sign-ups are not switched on yet.'); return; }
+      var subject = 'Foundash check: ' + (f.get('biz') || '');
+      var bodyText = 'Business: ' + (f.get('biz') || '') + '\nTown: ' + (f.get('town') || '') + '\nEmail: ' + (f.get('email') || '');
+      window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(bodyText);
+      show();
+      return;
+    }
+    fetch(endpoint, { method: 'POST', body: f, headers: { Accept: 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); show(); })
+      .catch(function () { alert('Something went wrong. Please try again.'); });
+  });
+})();
+</script>
 </body>
 </html>

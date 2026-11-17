@@ -35,7 +35,7 @@ a:hover{color:#f7f8f8}
 input::placeholder{color:#8a8f98}
 input:focus{outline:none;border-color:rgba(233,182,56,.7)}
 :root{color-scheme:dark}section[id]{scroll-margin-top:84px}a:focus-visible,button:focus-visible{outline:2px solid #e9b638;outline-offset:3px}
-@media (max-width:760px){[data-van-wrap]{height:min(38vh,320px)!important}}
+@media (max-width:760px){[data-van-wrap]{height:min(27vh,240px)!important}}
 </style>
 <style>
 [data-only],[data-form-wrap],[data-keep]{display:contents}
@@ -136,18 +136,18 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
 
 
 
-  <section id="how" data-screen-label="05 How it works" style="position:relative;background:#08090a">
-    <div style="position:relative;overflow:hidden">
+  <section id="how" data-pin="walk" data-screen-label="05 How it works" style="position:relative;height:400svh;background:#08090a">
+    <div style="position:sticky;top:0;height:100svh;overflow:hidden">
       <div style="position:absolute;left:0;right:0;bottom:0;height:min(110vh,1000px);background:#0f1a2e url('art/sky-night.jpg') center bottom / cover no-repeat"></div>
       <div style="position:absolute;left:0;right:0;bottom:0;height:min(110vh,1000px);background:linear-gradient(180deg,#08090a 0%,rgba(8,9,10,.4) 30%,rgba(8,9,10,.15) 52%,rgba(8,9,10,.55) 74%,#08090a 100%)"></div>
 
-      <div style="position:relative;display:flex;flex-direction:column;padding:clamp(100px,12vw,160px) 0 clamp(120px,14vw,200px)">
+      <div data-static-pad="clamp(100px,12vw,160px) 0 clamp(120px,14vw,200px)" style="position:relative;height:100%;display:flex;flex-direction:column;padding:92px 0 22px">
       <div style="width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:flex;justify-content:space-between;font-size:13px;color:#8a8f98">
         <span>How it works</span>
       </div>
-      <div style="display:grid;grid-template-columns:minmax(0,1fr);row-gap:clamp(64px,9vw,112px);margin-top:clamp(8px,2vw,24px)">
+      <div data-walk-grid data-static-gap="clamp(64px,9vw,112px)" style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);overflow:hidden;margin-top:clamp(8px,2vw,24px)">
 
-      <div data-band="0" style="width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
+      <div data-band="0" style="grid-area:1 / 1;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
         <div style="display:flex;flex-direction:column;gap:18px">
           <span style="font-size:14px;color:#8a8f98">Step 1</span>
           <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">We ask what your customers ask.</h2>
@@ -163,7 +163,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
         </div>
       </div>
 
-      <div data-band="1" style="width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
+      <div data-band="1" style="grid-area:1 / 1;opacity:0;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
         <div style="display:flex;flex-direction:column;gap:18px">
           <span style="font-size:14px;color:#8a8f98">Step 2</span>
           <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">We count how often you're named.</h2>
@@ -171,7 +171,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
         </div>
       </div>
 
-      <div data-band="2" style="width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
+      <div data-band="2" style="grid-area:1 / 1;opacity:0;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
         <div style="display:flex;flex-direction:column;gap:18px">
           <span style="font-size:14px;color:#8a8f98">Step 3</span>
           <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">We fix your site.</h2>
@@ -179,7 +179,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
         </div>
       </div>
 
-      <div data-band="3" style="width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
+      <div data-band="3" style="grid-area:1 / 1;opacity:0;width:100%;max-width:1200px;margin:0 auto;padding:clamp(20px,5vh,64px) clamp(20px,4vw,40px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px 64px;align-items:start">
         <div style="display:flex;flex-direction:column;gap:18px">
           <span style="font-size:14px;color:#8a8f98">Step 4</span>
           <h2 style="margin:0;font-size:clamp(36px,5vw,60px);font-weight:510;line-height:1;letter-spacing:-0.022em">We ask again.</h2>
@@ -208,7 +208,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
         <div style="flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);row-gap:clamp(32px,6vh,56px);margin-top:clamp(20px,5vh,48px)">
           <div style="grid-area:1 / 1;min-height:0;width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,4vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px 48px;align-items:center;opacity:var(--illo,0);transform:translateY(calc((1 - var(--illo,0)) * 56px))">
             <p style="margin:0;max-width:24ch;font-size:clamp(22px,2.4vw,30px);font-weight:510;line-height:1.2;letter-spacing:-0.02em">Foundash shows you how often you're one of them.<span style="display:block;margin-top:12px;font-size:max(16px,.6em);font-weight:400;line-height:1.45;letter-spacing:-0.01em;color:#8a8f98">We fix your website and check again.</span><span style="display:block;margin-top:14px;font-size:max(15px,.5em);font-weight:400;line-height:1.5;letter-spacing:-0.01em;color:#8a8f98">We measured 293 local business websites. Some were blocking AI without the owner knowing. <a href="/research/" style="color:#d0d6e0;text-decoration:underline;text-underline-offset:3px">Read the research</a></span></p>
-            <div data-van-wrap style="height:min(52vh,480px);mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent),linear-gradient(180deg,transparent,#000 18%,#000 60%,transparent 96%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent),linear-gradient(180deg,transparent,#000 18%,#000 60%,transparent 96%);mask-composite:intersect;-webkit-mask-composite:source-in">
+            <div data-van-wrap style="height:min(46vh,440px);mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent),linear-gradient(180deg,transparent,#000 18%,#000 60%,transparent 96%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent),linear-gradient(180deg,transparent,#000 18%,#000 60%,transparent 96%);mask-composite:intersect;-webkit-mask-composite:source-in">
               <img src="art/van-night.jpg" width="1024" height="1024" loading="lazy" decoding="async" alt="A work van parked on a dark street at night, a phone glowing on the dashboard" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center 55%;border-radius:0">
             </div>
           </div>
@@ -615,37 +615,45 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
     const bands = q('[data-band]');
     const count = root.querySelector('[data-walk-count]');
     const pins = q('[data-pin]').map(el => ({ el, kind: el.dataset.pin, x: 0, vars: {} }));
-    const staticPins = !motion || mq.matches; // on phones the problem section scrolls normally instead of pinning
-    if (staticPins) {
-      pins.forEach(P => {
-        const el = P.el, sticky = el.firstElementChild;
-        el.style.height = 'auto';
-        sticky.style.position = 'relative'; sticky.style.height = 'auto';
-        const stacked = Array.from(el.querySelectorAll('*')).filter(n => n.style && n.style.gridArea);
-        stacked.forEach(n => { n.style.gridArea = 'auto'; });
-        const fixedH = Array.from(sticky.querySelectorAll(':scope > div')).filter(n => n.style.height === '100%');
-        fixedH.forEach(n => { n.style.height = 'auto'; });
-        if (P.kind === 'walk') {
-          bands.forEach(b => { b.style.opacity = 1; b.style.transform = 'none'; b.style.pointerEvents = 'auto'; b.style.paddingBottom = '48px'; });
-          if (count) count.style.visibility = 'hidden';
-        } else {
-          [['--stream', 1], ['--red', 0], ['--night', 1], ['--awk', 1], ['--c1', 1], ['--c2', 1], ['--illo', 1]].forEach(([k, v]) => el.style.setProperty(k, v));
-        }
-        this.cleanups.push(() => {
-          el.style.height = ''; sticky.style.position = ''; sticky.style.height = '';
-          stacked.forEach(n => { n.style.gridArea = '1 / 1'; });
-          fixedH.forEach(n => { n.style.height = '100%'; });
-          bands.forEach(b => { b.style.paddingBottom = ''; b._op = undefined; });
-          if (count) count.style.visibility = '';
-          ['--stream', '--red', '--night', '--awk', '--c1', '--c2', '--illo', '--p'].forEach(k => el.style.removeProperty(k));
-        });
+    // A section only pins when its content fits on this screen. If it does not fit, it scrolls normally.
+    const fits = P => Array.from(P.el.querySelectorAll("*")).filter(n => n.style && n.style.gridArea).every(n => Math.max(n.offsetHeight, n.scrollHeight) <= n.parentElement.clientHeight + 2);
+    pins.forEach(P => { P.still = !motion || !fits(P); });
+    const live = pins.filter(P => !P.still);
+    pins.filter(P => P.still).forEach(P => {
+      const el = P.el, sticky = el.firstElementChild;
+      el.style.height = "auto";
+      sticky.style.position = "relative"; sticky.style.height = "auto";
+      const stacked = Array.from(el.querySelectorAll("*")).filter(n => n.style && n.style.gridArea);
+      stacked.forEach(n => { n.style.gridArea = "auto"; });
+      const fixedH = Array.from(sticky.querySelectorAll(":scope > div")).filter(n => n.style.height === "100%");
+      fixedH.forEach(n => { n.style.height = "auto"; });
+      const pad = el.querySelector("[data-static-pad]"), grid = el.querySelector("[data-walk-grid]");
+      if (P.kind === "walk") {
+        bands.forEach(b => { b.style.opacity = 1; b.style.transform = "none"; b.style.pointerEvents = "auto"; });
+        if (pad) pad.style.padding = pad.dataset.staticPad;
+        if (grid) { grid.style.rowGap = grid.dataset.staticGap; grid.style.overflow = "visible"; }
+        if (count) count.style.visibility = "hidden";
+      } else {
+        [["--night", 1], ["--awk", 1], ["--illo", 1]].forEach(([k, v]) => el.style.setProperty(k, v));
+      }
+      this.cleanups.push(() => {
+        el.style.height = ""; sticky.style.position = ""; sticky.style.height = "";
+        stacked.forEach(n => { n.style.gridArea = "1 / 1"; });
+        fixedH.forEach(n => { n.style.height = "100%"; });
+        if (pad) pad.style.padding = "";
+        if (grid) { grid.style.rowGap = ""; grid.style.overflow = ""; }
+        if (P.kind === "walk") bands.forEach(b => { b.style.opacity = ""; b.style.transform = ""; b.style.pointerEvents = ""; b._op = undefined; });
+        if (count) count.style.visibility = "";
+        ["--night", "--awk", "--illo", "--p"].forEach(k => el.style.removeProperty(k));
       });
-    } else if (this.state.narrow) {
-      pins.forEach(P => {
-        P.el.style.height = P.kind === 'walk' ? '280svh' : '240svh';
-        this.cleanups.push(() => { P.el.style.height = ''; });
-      });
-    }
+    });
+    if (this.state.narrow) live.forEach(P => {
+      P.el.style.height = P.kind === "walk" ? "280svh" : "240svh";
+      this.cleanups.push(() => { P.el.style.height = ""; });
+    });
+    // Web fonts can make text taller after load. If a pinned section stops fitting, set up again.
+    let fontsAlive = true; this.cleanups.push(() => { fontsAlive = false; });
+    if (live.length && document.fonts) document.fonts.ready.then(() => { if (fontsAlive && live.some(P => !fits(P))) { App.teardown(); App.setup(); } });
     const setVar = (P, k, v) => { if (P.vars[k] === undefined || Math.abs(P.vars[k] - v) > .004 || (v === 0 || v === 1) && P.vars[k] !== v) { P.vars[k] = v; P.el.style.setProperty(k, v.toFixed(4)); } };
     let last = performance.now(), raf = 0, lit = -1, hdr = -1, pillOn = -1, lastCount = '';
 
@@ -679,7 +687,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
       }
 
       const kLerp = 1 - Math.pow(1 - .105, dt / 16.667);
-      if (!staticPins) pins.forEach(P => {
+      live.forEach(P => {
         const r = P.el.getBoundingClientRect();
         const p = clamp(-r.top / Math.max(1, r.height - vh));
         P.x += (p - P.x) * kLerp; if (Math.abs(p - P.x) < .0005) P.x = p;
@@ -703,7 +711,7 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
 
       if (pill) {
         const heroH = hero ? hero.offsetHeight * .7 : 600;
-        const pinned = !staticPins && pins.some(P => { const r = P.el.getBoundingClientRect(); return r.top <= 1 && r.bottom >= vh - 1; });
+        const pinned = live.some(P => { const r = P.el.getBoundingClientRect(); return r.top <= 1 && r.bottom >= vh - 1; });
         const on = sy > heroH && !pinned && (!cta || cta.getBoundingClientRect().top > vh * .55) ? 1 : 0;
         if (on !== pillOn) { pillOn = on; pill.style.opacity = on; pill.style.transform = on ? 'translateY(0)' : 'translateY(12px)'; pill.style.pointerEvents = on ? 'auto' : 'none'; }
       }
@@ -714,7 +722,9 @@ input:focus{outline:none;border-color:rgba(233,182,56,.7)}
     }
   };
   App.setup();
-  mq.addEventListener('change', function () { App.teardown(); App.state.narrow = mq.matches; App.setup(); });
+  // Re-check after a width change (rotating a phone, resizing a window). Height-only changes, like a phone browser bar hiding, are ignored.
+  let lastW = window.innerWidth, rt = 0;
+  window.addEventListener('resize', function () { if (window.innerWidth === lastW) return; lastW = window.innerWidth; clearTimeout(rt); rt = setTimeout(function () { App.teardown(); App.state.narrow = mq.matches; App.setup(); }, 250); });
 
   // founder email link, built from the same address the form uses
   var mm = root.querySelector('[data-mail-me]'), fm = root.querySelector('form[data-signup]');

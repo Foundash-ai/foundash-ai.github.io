@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://getfoundash.com/</loc><lastmod>2026-11-16</lastmod></url>
-  <url><loc>https://getfoundash.com/research/</loc><lastmod>2026-11-16</lastmod></url>
+  <url><loc>https://getfoundash.com/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://getfoundash.com/research/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://getfoundash.com/check-chatgpt-access/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://getfoundash.com/cloudflare-ai-crawlers/</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://getfoundash.com/small-business-ai-crawler-blocking/</loc><lastmod>2026-11-18</lastmod></url>
 </urlset>

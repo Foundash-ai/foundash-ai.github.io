@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to check if your website is blocking ChatGPT | Foundash</title>
+<meta name="description" content="Test what your server returns to ChatGPT in one command, then check robots.txt, noindex and your CDN. With OpenAI's current crawler names.">
+<link rel="canonical" href="https://getfoundash.com/check-chatgpt-access/">
+<meta property="og:url" content="https://getfoundash.com/check-chatgpt-access/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to check if your website is blocking ChatGPT | Foundash">
+<meta property="og:description" content="Test what your server returns to ChatGPT in one command, then check robots.txt, noindex and your CDN. With OpenAI's current crawler names.">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://getfoundash.com/og.jpg?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="See if ChatGPT recommends you. The first check is free.">
+<meta name="twitter:image" content="https://getfoundash.com/og.jpg?v=2">
+<link rel="icon" href="/favicon.ico?v=2" sizes="48x48">
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#08090a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>  :root {
+    color-scheme: dark;
+    --void:#08090a; --carbon:#0f1011; --graphite:#23252a;
+    --fog:#8a8f98; --mist:#d0d6e0; --paper:#ffffff;
+    --sans:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--void); color:var(--mist); font-family:var(--sans); font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  main { max-width:660px; margin:0 auto; padding:clamp(48px,9vw,104px) max(22px,env(safe-area-inset-left)) 90px max(22px,env(safe-area-inset-right)); }
+  h1 { color:var(--paper); font-size:clamp(1.9rem,5vw,2.7rem); font-weight:600; line-height:1.1; letter-spacing:-0.033em; margin:0 0 18px; text-wrap:balance; }
+  h2 { color:var(--paper); font-size:1.16rem; font-weight:600; line-height:1.3; letter-spacing:-0.016em; margin:46px 0 0; text-wrap:balance; }
+  h2 + p, h2 + ul, h2 + ol { margin-top:14px; }
+  p { margin:19px 0 0; }
+  ul, ol { margin:19px 0 0; padding-left:1.25em; }
+  li + li { margin-top:8px; }
+  strong { color:var(--paper); font-weight:600; }
+  code { font-family:var(--mono); font-size:0.855em; color:var(--paper); background:var(--carbon); border:1px solid var(--graphite); border-radius:4px; padding:1px 5px; overflow-wrap:anywhere; }
+  pre { margin:16px 0 0; background:var(--carbon); border:1px solid var(--graphite); border-radius:10px; padding:16px 18px; overflow-x:auto; }
+  pre code { background:none; border:0; padding:0; color:var(--mist); font-size:0.8rem; line-height:1.65; white-space:pre; overflow-wrap:normal; }
+  .byline { color:var(--fog); font-size:0.9rem; margin:0 0 34px; padding-bottom:24px; border-bottom:1px solid var(--graphite); }
+  .table { margin:19px 0 0; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:0.92rem; line-height:1.5; }
+  th, td { text-align:left; vertical-align:top; padding:10px 12px 10px 0; border-bottom:1px solid var(--graphite); }
+  th { color:var(--paper); font-weight:600; }
+  td.n { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .sources { margin-top:46px; padding-top:22px; border-top:1px solid var(--graphite); color:var(--fog); font-size:0.88rem; }
+  .sources p { margin-top:8px; }
+  footer { max-width:660px; margin:0 auto; color:var(--fog); font-size:0.9rem; padding:26px max(22px,env(safe-area-inset-left)) 80px; border-top:1px solid var(--graphite); }
+  footer p { margin:10px 0 0; }
+  footer a { color:var(--mist); }
+  ::selection { background:var(--paper); color:var(--void); }
+  a { color:var(--paper); }
+  :focus-visible { outline:2px solid var(--paper); outline-offset:3px; }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://getfoundash.com/#org","name":"Foundash","url":"https://getfoundash.com/"},{"@type":"Article","@id":"https://getfoundash.com/check-chatgpt-access/#article","headline":"How to check if your website is blocking ChatGPT","url":"https://getfoundash.com/check-chatgpt-access/","mainEntityOfPage":"https://getfoundash.com/check-chatgpt-access/","datePublished":"2026-11-18","dateModified":"2026-11-18","author":{"@id":"https://getfoundash.com/#org"},"publisher":{"@id":"https://getfoundash.com/#org"},"inLanguage":"en","about":[{"@type":"Thing","name":"ChatGPT"},{"@type":"Thing","name":"OAI-SearchBot"},{"@type":"Thing","name":"robots.txt"},{"@type":"Thing","name":"AI crawler blocking"}]}]}</script>
+</head>
+<body>
+<main>
+  <p style="margin:0 0 28px;font-size:0.9rem"><a href="/" style="color:var(--fog);text-decoration:none">&larr; Foundash home</a></p>
+  <article>
+  <h1>How to check if your website is blocking ChatGPT</h1>
+  <p class="byline">Foundash. <time datetime="2026-11-18">18 November 2026</time>. Checked against OpenAI's crawler documentation.</p>
+  <p><strong>Ask your server for your homepage the way ChatGPT does, and see what comes back. A 200 means ChatGPT can read the page. A 403 or 429 means something is turning it away.</strong> Then check your robots.txt, your noindex setting and your CDN or security plugin, because each of them can block ChatGPT on its own.</p>
+
+  <h2>Which ChatGPT visitor matters</h2>
+  <p>OpenAI sends three different visitors, and they do different jobs (<a href="https://platform.openai.com/docs/bots">OpenAI's crawler documentation</a>):</p>
+  <ul>
+    <li><code>OAI-SearchBot</code> finds pages for ChatGPT's search answers. OpenAI says sites that block it "will not be shown in ChatGPT search answers".</li>
+    <li><code>ChatGPT-User</code> fetches a page when a person asks ChatGPT about it. Because a person started the request, OpenAI says robots.txt rules may not apply to it.</li>
+    <li><code>GPTBot</code> collects pages that may be used to train OpenAI's models. Blocking it opts you out of training. It does not hide you from ChatGPT's answers.</li>
+  </ul>
+  <p>If you want ChatGPT to be able to recommend you, the two that matter are <code>OAI-SearchBot</code> and <code>ChatGPT-User</code>.</p>
+
+  <h2>1. Test what your server returns</h2>
+  <p>Run these in Terminal on a Mac, with your own address at the end. On Windows, use Command Prompt, type <code>curl.exe</code> instead of <code>curl</code>, and replace <code>/dev/null</code> with <code>NUL</code>.</p>
+  <p>As ChatGPT's search crawler:</p>
+  <pre><code>curl -s -o /dev/null -w "%{http_code}\n" -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36; compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot" https://yoursite.com/</code></pre>
+  <p>As ChatGPT fetching a page for a person:</p>
+  <pre><code>curl -s -o /dev/null -w "%{http_code}\n" -A "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot" https://yoursite.com/</code></pre>
+  <p>And once with no crawler name, as a control:</p>
+  <pre><code>curl -s -o /dev/null -w "%{http_code}\n" https://yoursite.com/</code></pre>
+  <p>How to read the result:</p>
+  <ul>
+    <li>200 for all three: nothing at your server is turning ChatGPT away.</li>
+    <li>403 or 429 for ChatGPT, but 200 for the control: something is refusing ChatGPT specifically.</li>
+    <li>403 for all three: a general bot rule, which is probably keeping Google out too.</li>
+  </ul>
+  <p>Use the full strings above, which are what OpenAI's crawlers send, not just the short name. A rule that checks the whole string can treat a shortened name differently.</p>
+  <p>One limit: the real crawlers come from OpenAI's own addresses, which OpenAI publishes. A firewall that checks addresses can treat your test differently from a real visit. Cloudflare's AI crawler settings apply to "matching unverified bots" as well (<a href="https://developers.cloudflare.com/bots/additional-configurations/block-ai-bots/">Cloudflare's documentation</a>), so for those settings this test is a fair one.</p>
+
+  <h2>2. Read your robots.txt</h2>
+  <p>Open <code>yoursite.com/robots.txt</code> and look for groups that name <code>OAI-SearchBot</code>, <code>ChatGPT-User</code> or <code>GPTBot</code>, or a <code>User-agent: *</code> group with <code>Disallow: /</code>.</p>
+  <ul>
+    <li>Only <code>GPTBot</code> refused: you have opted out of training, and ChatGPT can still read your pages when someone asks.</li>
+    <li><code>OAI-SearchBot</code> refused: ChatGPT's search answers will not show your site.</li>
+  </ul>
+  <p>In our check of 293 local business websites, 14 of the 15 that refused an AI crawler in robots.txt refused only the training crawlers (<a href="/research/">Foundash research, August 2026</a>).</p>
+
+  <h2>3. Check for noindex</h2>
+  <p>On WordPress, look at Settings &gt; Reading for "Discourage search engines from indexing this site". Since WordPress 5.3 this setting adds a noindex tag to your pages instead of a robots.txt rule, so reading robots.txt alone will not show it.</p>
+
+  <h2>4. Check your CDN, host and security plugins</h2>
+  <p>If step 1 showed a refusal but your robots.txt is clean, the block is at your server or in front of it: a CDN such as Cloudflare (see <a href="/cloudflare-ai-crawlers/">Is Cloudflare blocking AI crawlers from my website?</a>), your host's bot protection, or a security plugin.</p>
+  <p>In our check, 12 of the 18 sites that refused an AI crawler had no robots.txt rule about AI at all, and they ran on six different server setups (<a href="/research/">Foundash research</a>).</p>
+
+  <h2>On WordPress, a free plugin runs these checks</h2>
+  <p><a href="https://wordpress.org/plugins/foundash-ai-access-check/">Foundash AI Crawler Check</a> runs steps 1 to 3 from your dashboard and shows the code each crawler got. It runs from your own server, so it can miss a block at an outside CDN. The terminal test above runs from outside.</p>
+
+  <h2>Why can't ChatGPT read my website?</h2>
+  <p>Usually one of three things: your server or CDN refuses its crawler with a 403 or 429, your robots.txt blocks <code>OAI-SearchBot</code>, or your pages carry a noindex tag. The checks above find all three.</p>
+
+  <h2>How do I know if my WordPress site is blocking GPTBot?</h2>
+  <p>Run the test from step 1 with GPTBot's name, and look for a <code>GPTBot</code> group in your robots.txt:</p>
+  <pre><code>curl -s -o /dev/null -w "%{http_code}\n" -A "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot" https://yoursite.com/</code></pre>
+  <p>Remember that blocking GPTBot only opts you out of training. To check whether ChatGPT can recommend you, test <code>OAI-SearchBot</code> and <code>ChatGPT-User</code>.</p>
+
+  <h2>Does ChatGPT recommend your business?</h2>
+  <p>These checks tell you whether ChatGPT can read your site. Whether it names your business when a customer asks is a different question. We check that by hand, and the first check is free: <a href="/#start">get a free check</a>.</p>
+
+  <div class="sources">
+    <p>Sources: <a href="https://platform.openai.com/docs/bots">OpenAI, Overview of OpenAI Crawlers</a> (read 18 November 2026). <a href="https://developers.cloudflare.com/bots/additional-configurations/block-ai-bots/">Cloudflare, AI Crawler and Agent access policies</a> (read 18 November 2026). <a href="/research/">Foundash, 293 local business websites, August 2026</a>.</p>
+  </div>
+
+  </article>
+</main>
+<footer>
+  <p>Foundash checks whether AI assistants like ChatGPT recommend local businesses, and fixes the websites so they do. <a href="/#start">The first check is free.</a></p>
+  <p>More from Foundash: <a href="/cloudflare-ai-crawlers/">Is Cloudflare blocking AI crawlers from my website?</a> · <a href="/small-business-ai-crawler-blocking/">How many small business websites block AI crawlers?</a> · <a href="/research/">our 293-site research</a></p>
+  
+</footer>
+</body>
+</html>
